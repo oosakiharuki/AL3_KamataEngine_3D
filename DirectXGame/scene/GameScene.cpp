@@ -5,13 +5,23 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() { 
+	delete model_; 
+}
 
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	//3Dモデル
+	textureHandle_ = TextureManager::Load("Mario.jpg");
+	
+	model_ = Model::Create();
+
+	viewProjection_.Initialize();
+
 }
 
 void GameScene::Update() { }
