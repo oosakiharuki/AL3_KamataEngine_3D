@@ -7,6 +7,7 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() { 
 	delete model_; 
+	delete player_;
 }
 
 void GameScene::Initialize() {
@@ -22,9 +23,16 @@ void GameScene::Initialize() {
 
 	viewProjection_.Initialize();
 
+	//自キャラ生成
+	player_ = new Player();
+
+	player_->Initialize(model_, textureHandle_, &viewProjection_);
 }
 
-void GameScene::Update() { }
+void GameScene::Update() { 
+	// 自キャラ更新
+	player_->Update();
+}
 
 void GameScene::Draw() {
 
@@ -52,6 +60,10 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+
+
+	//自キャラ描画
+	player_->Draw();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
