@@ -5,16 +5,59 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() {
+	//delete model_;
+	delete modelBlock_;
+
+	for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
+		delete worldTransformBlock;
+	}
+	worldTransformBlocks_.clear();
+}
 
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	//model_ = Model::Create();
+	modelBlock_ = Model::Create();
+	viewProjection_.Initialize();
+
+	//const uint32_t kNumBlockVirtical = 10;
+	const uint32_t kNumBlockHorizontal = 20;
+
+	const float kBlockWidth = 2.0f;
+	//const float kBlockHeight = 2.0f;
+
+	//worldTransformBlocks_.resize(kNumBlockVirtical);
+	worldTransformBlocks_.resize(kNumBlockHorizontal);
+
+	//for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+	//	worldTransformBlocks_.resize(kNumBlockVirtical);
+
+	//}
+
+	for (uint32_t i = 0; i < kNumBlockHorizontal; ++i) {
+
+			worldTransformBlocks_[i] = new WorldTransform();
+			worldTransformBlocks_[i]->Initialize();
+			worldTransformBlocks_[i]->translation_.x = kBlockWidth * i;
+			//worldTransformBlocks_[i]->translation_.y = kBlockHeight;
+	}
+
+
 }
 
-void GameScene::Update() { }
+void GameScene::Update() {
+
+	
+	for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
+
+		worldTransformBlock->UpdateMatrix();
+	}
+}
 
 void GameScene::Draw() {
 
@@ -55,6 +98,10 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 	//sprite_->Draw();
+
+	for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
+		modelBlock_->Draw(*worldTransformBlock, viewProjection_);
+	}
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

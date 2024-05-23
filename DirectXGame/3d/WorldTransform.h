@@ -5,6 +5,7 @@
 #include <d3d12.h>
 #include <type_traits>
 #include <wrl.h>
+#include <MyMath.h>
 
 // 定数バッファ用データ構造体
 struct ConstBufferDataWorldTransform {
@@ -26,6 +27,16 @@ public:
 	Matrix4x4 matWorld_;
 	// 親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
+
+	//行列を計算、転送する
+	void UpdateMatrix();
+	MyMath* myMath_ = new MyMath;
+
+	Matrix4x4 rotateX_ = {};
+	Matrix4x4 rotateY_ = {};
+	Matrix4x4 rotateZ_ = {};
+	Matrix4x4 rotateXYZ_ = {};
+
 
 	WorldTransform() = default;
 	~WorldTransform() = default;

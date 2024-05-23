@@ -7,7 +7,9 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "MyMath.h"
 
+#include<vector>
 
 /// <summary>
 /// ゲームシーン
@@ -48,5 +50,13 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+
+	//Model* model_ = nullptr;
+	Model* modelBlock_ = nullptr;
+
+	ViewProjection viewProjection_;
+
+	std::vector<WorldTransform*> worldTransformBlocks_;
+
 
 };
