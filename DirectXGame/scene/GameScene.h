@@ -55,9 +55,17 @@ private: // メンバ変数
 	
 	//3Dモデルデータ
 	Model* model_ = nullptr;
+	Model* modelBlock_ = nullptr;
+
+
+	WorldTransform worldTransform_;
+
 
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
+
+	std::vector<WorldTransform*> worldTransformBlocks_;
+
 
 	//自分キャラ
 	Player* player_ = nullptr;
