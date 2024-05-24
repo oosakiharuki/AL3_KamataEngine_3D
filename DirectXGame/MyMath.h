@@ -1,0 +1,9 @@
+
+
+class MyMath {
+
+public:
+
+
+private:
+};
