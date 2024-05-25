@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "TextureManager.h"
+#include "MyMath.h"
 #include <cassert>
 
 
@@ -7,7 +8,7 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() { 
 	delete model_; 
-	delete modelBlock_;
+	//delete modelBlock_;
 
 	for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
 		delete worldTransformBlock;
@@ -100,7 +101,7 @@ void GameScene::Draw() {
 
 
 	//自キャラ描画
-	player_->Draw();
+	//player_->Draw();
 
 	for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
 		modelBlock_->Draw(*worldTransformBlock, viewProjection_);

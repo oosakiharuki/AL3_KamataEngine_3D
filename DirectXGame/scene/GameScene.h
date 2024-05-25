@@ -9,6 +9,7 @@
 #include "WorldTransform.h"
 #include "Player.h"
 
+#include<vector>
 
 /// <summary>
 /// ゲームシーン
