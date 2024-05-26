@@ -9,6 +9,7 @@
 #include "WorldTransform.h"
 #include "Player.h"
 
+#include "DebugCamera.h"
 #include<vector>
 
 /// <summary>
@@ -61,13 +62,16 @@ private: // メンバ変数
 
 	WorldTransform worldTransform_;
 
-
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 
-	std::vector<WorldTransform*> worldTransformBlocks_;
-
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 	//自分キャラ
 	Player* player_ = nullptr;
+
+	//デバッグ
+	bool isDebugCameraActive_ = false;
+
+	DebugCamera* debugCamera_ = nullptr;
 };
