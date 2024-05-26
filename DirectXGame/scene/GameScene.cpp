@@ -8,6 +8,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() { 
 	delete modelSkydome_;
 	delete skydome_;
+	delete debugCamera_;
 }
 
 void GameScene::Initialize() {
@@ -24,11 +25,22 @@ void GameScene::Initialize() {
 
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, textureHandle_, &viewProjection_);
+	
+	// デバッグカメラ
+	debugCamera_ = new DebugCamera(1280, 720);
 }
 
 void GameScene::Update() { 
 	
 	skydome_->Update();
+
+	debugCamera_->Update();
+
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_SPACE)) {
+		isDebugCameraActive_ = true;
+	}
+#endif
 }
 
 void GameScene::Draw() {
@@ -58,8 +70,12 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-
-	skydome_->Draw();
+	if (isDebugCameraActive_ == true) {
+		skydome_->Draw(debugCamera_->GetViewProjection());
+	} 
+	else {
+		skydome_->Draw(viewProjection_);
+	}
 
 
 

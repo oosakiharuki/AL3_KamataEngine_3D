@@ -17,6 +17,9 @@ void Skydome::Update() {
 }
 
 
-void Skydome::Draw() { 
-	model_->Draw(worldTransform_, *viewProjection_, textureHandle_); 
+void Skydome::Draw(const ViewProjection &viewProjection) { 
+	model_->Draw(worldTransform_, viewProjection, textureHandle_); 
+
+
+	//model_->Draw(worldTransform_, *viewProjection_, textureHandle_); 
 }

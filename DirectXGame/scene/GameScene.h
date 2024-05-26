@@ -10,6 +10,8 @@
 
 #include "Skydome.h"
 
+#include "DebugCamera.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -61,4 +63,8 @@ private: // メンバ変数
 
 	Skydome* skydome_ = nullptr;
 
+	// デバッグ
+	bool isDebugCameraActive_ = false;
+
+	DebugCamera* debugCamera_ = nullptr;
 };

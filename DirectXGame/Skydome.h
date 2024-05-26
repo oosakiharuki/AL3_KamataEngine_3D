@@ -7,7 +7,7 @@ public:
 
 	void Update();
 
-	void Draw();
+	void Draw(const ViewProjection& viewProjection);
 
 private:
 	//ワールド返還データ
