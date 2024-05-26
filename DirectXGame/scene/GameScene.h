@@ -8,6 +8,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 
+#include "Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -48,5 +49,16 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+
+	uint32_t textureHandle_ = 0u;
+
+	//WorldTransform worldTransform_;
+	ViewProjection viewProjection_;
+
+
+	Model* modelSkydome_ = nullptr;
+
+
+	Skydome* skydome_ = nullptr;
 
 };

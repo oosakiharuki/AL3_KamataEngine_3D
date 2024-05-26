@@ -5,16 +5,31 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() { 
+	delete modelSkydome_;
+	delete skydome_;
+}
 
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	textureHandle_ = TextureManager::Load("sample.png");
+
+	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
+
+	viewProjection_.Initialize();
+
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, textureHandle_, &viewProjection_);
 }
 
-void GameScene::Update() { }
+void GameScene::Update() { 
+	
+	skydome_->Update();
+}
 
 void GameScene::Draw() {
 
@@ -42,6 +57,11 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+
+
+	skydome_->Draw();
+
+
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
