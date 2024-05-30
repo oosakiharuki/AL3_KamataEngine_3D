@@ -12,6 +12,8 @@
 #include "DebugCamera.h"
 #include<vector>
 
+#include "MapChipField.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -43,6 +45,11 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+
+
+	//void GenerateBlocks();
+
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -60,7 +67,7 @@ private: // メンバ変数
 	Model* modelBlock_ = nullptr;
 
 
-	WorldTransform worldTransform_;
+	//WorldTransform worldTransform_;
 
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
@@ -74,4 +81,7 @@ private: // メンバ変数
 	bool isDebugCameraActive_ = false;
 
 	DebugCamera* debugCamera_ = nullptr;
+
+	MapChipField* mapChipField_;
+
 };
