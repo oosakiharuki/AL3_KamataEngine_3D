@@ -8,6 +8,8 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 
+#include "MapChipField.h"
+
 
 /// <summary>
 /// ゲームシーン
