@@ -9,7 +9,7 @@ GameScene::GameScene() {
 }
 
 GameScene::~GameScene() { 
-	delete model_; 
+	delete modelPlayer_; 
 	delete modelBlock_;
 	for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformLine) {
@@ -31,29 +31,29 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	//3Dモデル
-	textureHandle_ = TextureManager::Load("Mario.jpg");
-	
-	model_ = Model::Create();
+	modelPlayer_ = Model::CreateFromOBJ("player",true);
 	modelBlock_ = Model::Create();
 
 	//worldTransform_.Initialize();
 
 	viewProjection_.Initialize();
+	
+	//マップチップ
+	mapChipField_ = new MapChipField;
+	mapChipField_->LoadMapChipCsv("Resources/block.csv");
+
 
 	//自キャラ生成
 	player_ = new Player();
 
-	player_->Initialize(model_, textureHandle_, &viewProjection_);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1,18);
+
+	player_->Initialize(modelPlayer_, &viewProjection_,playerPosition);
+
 
 	//デバッグカメラ
 	debugCamera_ = new DebugCamera(1280, 720);
 	
-
-
-
-	mapChipField_ = new MapChipField;
-	mapChipField_->LoadMapChipCsv("Resources/block.csv");
-
 
 	//GenerateBlocks();
 		
@@ -136,7 +136,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	// 自キャラ描画
-	// player_->Draw();
+	player_->Draw(debugCamera_);
 
 	for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformLine) {
