@@ -119,3 +119,11 @@ Matrix4x4 MyMath::MakeAffineMatrix(Vector3 scale_, Vector3 rotate_, Vector3 tran
 	result.m[3][3] = 1.0f;
 	return result;
 }
+
+Vector3 MyMath::Add(const Vector3& v1, const Vector3& v2) {
+	Vector3 result;
+	result.x = v1.x + v2.x;
+	result.y = v1.y + v2.y;
+	result.z = v1.z + v2.z;
+	return result;
+}

@@ -61,14 +61,14 @@ void Player::Update() {
 
 		if (Input::GetInstance()->PushKey(DIK_UP)) {
 
-			velocity_ = Add(velocity_, Vector3(0, kJumpAcceleration, 0));
+			velocity_ = myMath->Add(velocity_, Vector3(0, kJumpAcceleration, 0));
 		}
 		if (velocity_.y > 0.0f) {
 			onGraund_ = false;
 		}
 
 	} else {
-		velocity_ = Add(velocity_, Vector3(0, -kGravityAcceleration, 0));
+		velocity_ = myMath->Add(velocity_, Vector3(0, -kGravityAcceleration, 0));
 		 velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
 		if (landing) {
 			worldTransform_.translation_.y = 2.0f;

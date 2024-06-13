@@ -22,6 +22,7 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 
 	delete mapChipField_;
+	delete cameraController_;
 }
 
 void GameScene::Initialize() {
@@ -49,6 +50,14 @@ void GameScene::Initialize() {
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1,18);
 
 	player_->Initialize(modelPlayer_, &viewProjection_,playerPosition);
+
+
+	cameraController_ = new CameraController;
+
+	cameraController_->Inyialize();
+
+	cameraController_->Reset();
+
 
 
 	//デバッグカメラ
@@ -97,6 +106,9 @@ void GameScene::Update() {
 			}
 		}
 	}
+
+	cameraController_->Update();
+
 	debugCamera_->Update();
 
 #ifdef _DEBUG 
