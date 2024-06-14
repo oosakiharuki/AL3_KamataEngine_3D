@@ -11,14 +11,26 @@ struct MapChipDate {
 	std::vector<std::vector<MapChipType>> date; // 空白orブロック
 };
 
+
+
+
 class MapChipField {
 public:
-	
+	struct IndexSet {
+	uint32_t xIntex;
+	uint32_t yIntex;
+	};
+struct Rect {
+	float left;
+	float right;
+	float bottom;
+	float top;
+};
 	void ResetMapChipDate();
 	void LoadMapChipCsv(const std::string& filePath);
 	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
 	Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
-
+	Rect GetRectByIndex(uint32_t xIndex,uint32_t yIndex);
 
 		
 	// ブロックサイズ
@@ -28,7 +40,7 @@ public:
 	static inline const uint32_t GetkNumBlockVertical() { return kNumBlockVertical; };
 	static inline const uint32_t GetkNumBlockHorizontal() { return kNumBlockHorizontal; };
 
-
+	IndexSet GetMapChipIntexSetByPosition(const Vector3& position);
 
 private:
 	// ブロックサイズ

@@ -1,9 +1,12 @@
 #define NOMINMAX
 #include "Player.h"
+#include "MapChipField.h"
 #include "Input.h"
 #include <cassert>
 #include <numbers>
 #include <algorithm>
+
+#include "DebugText.h"
 
 void Player::Initialize(Model* model, ViewProjection* viewProjection,const Vector3& position) {
 
@@ -17,11 +20,80 @@ void Player::Initialize(Model* model, ViewProjection* viewProjection,const Vecto
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
 }
 
+Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
+
+	Vector3 offsetTable[kNumCorner] = {
+
+	    {+kWidth / 2.0f, -kHeight / 2.0f, 0.0f},
+	    {-kWidth / 2.0f, -kHeight / 2.0f, 0.0f},
+	    {+kWidth / 2.0f, +kHeight / 2.0f, 0.0f},
+	    {-kWidth / 2.0f, +kHeight / 2.0f, 0.0f},
+	};
+
+	return Add(center , offsetTable[static_cast<uint32_t>(corner)]);
+};
+
+
+void Player::MapChipCollision(CollisionMapInfo& info) {
+
+	std::array<Vector3, kNumCorner> positionNew;
+
+	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+		positionNew[i] = CornerPosition(Add(worldTransform_.translation_ , info.moveCount),static_cast<Corner>(i) );
+
+	}
+	//jimen kara tobutoki nomi ni suru
+	if (info.moveCount.y <= 0) {
+		return;
+	}
+
+	MapChipType mapChipType;
+	bool hit = false;
+
+	MapChipField::IndexSet indexSet;
+	
+	indexSet = mapChipField_->GetMapChipIntexSetByPosition(positionNew[kLeftTop]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex,indexSet.yIntex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	indexSet = mapChipField_->GetMapChipIntexSetByPosition(positionNew[kRightTop]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex, indexSet.yIntex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+
+	if (hit) {
+		indexSet = mapChipField_->GetMapChipIntexSetByPosition(velocity_);
+	
+		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIntex,indexSet.yIntex);
+		info.moveCount.y = std::max(0.0f,velocity_.y);
+
+		info.ceilingTachiFlag_ = true;
+	}
+}
+
+void Player::prosperity(const CollisionMapInfo& info) {
+	//worldTransform_.translation_.x += info.moveCount.x;
+	worldTransform_.translation_.y += info.moveCount.y;
+	//worldTransform_.translation_.z += info.moveCount.z;
+}
+
+void Player::CeilingTachi(const CollisionMapInfo& info) {
+	if (info.ceilingTachiFlag_) {
+		DebugText::GetInstance()->ConsolePrintf("hit celling");
+		velocity_.y = 0;
+	}
+}
+
 void Player::Update() {
 	worldTransform_.TransferMatrix();
 
 	if (onGraund_) {
 
+		//1
 		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
 
 			Vector3 acceleration = {};
@@ -58,7 +130,7 @@ void Player::Update() {
 		} else {
 			velocity_.x *= (1.0f - kAttenuation);
 		}
-
+		
 		if (Input::GetInstance()->PushKey(DIK_UP)) {
 
 			velocity_ = Add(velocity_, Vector3(0, kJumpAcceleration, 0));
@@ -105,6 +177,26 @@ void Player::Update() {
 
 		worldTransform_.rotation_.y = destinationRotationY - turnTimer_;
 	}
+
+		//2
+		//collision
+		CollisionMapInfo collisionMapInfo_;
+		collisionMapInfo_.moveCount = velocity_;
+
+		MapChipCollision(collisionMapInfo_);
+		//MapChipCollision(collisionMapInfo_);
+		//MapChipCollision(collisionMapInfo_);
+		//MapChipCollision(collisionMapInfo_);
+
+		//3
+		prosperity(collisionMapInfo_);
+		//4
+		CeilingTachi(collisionMapInfo_);
+
+
+
+
+
 }
 
 void Player::Draw(DebugCamera* debug) {

@@ -3,10 +3,23 @@
 
 #include "DebugCamera.h"
 
+class MapChipField;
+
 enum class LRDirection {
 	kRight,
 	kLeft,
 };
+
+enum Corner {
+	kRightBottom,
+	kLeftBottom,
+	kRightTop,
+	kLeftTop,
+
+	kNumCorner
+
+};
+
 class Player {
 
 public:
@@ -16,7 +29,30 @@ public:
 
 	void Draw(DebugCamera* debug);
 
+
+	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
+
+	struct CollisionMapInfo {
+		bool ceilingTachiFlag_ = false;
+		bool landingFlag_ = false;
+		bool wallTachiFlag_ = false;
+		Vector3 moveCount;
+	};
+
+	void MapChipCollision(CollisionMapInfo& info);
+	
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+
+	Vector3 CornerPosition(const Vector3& center, Corner corner);
+
+	void prosperity(const CollisionMapInfo& info);//hantei
+
+	void CeilingTachi(const CollisionMapInfo& info);
+
 private:
+	MapChipField* mapChipField_ = nullptr;
+
 	WorldTransform worldTransform_;
 
 	Model* model_ = nullptr;
@@ -45,6 +81,8 @@ private:
 	static inline float kJumpAcceleration = 1.0f;
 
 	bool landing = false;
+
+	static inline float kblank = 0.8f;
 
 	Vector3 Add(const Vector3& v1, const Vector3 v2) {
 		Vector3 result;

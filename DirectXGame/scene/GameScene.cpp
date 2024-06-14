@@ -37,12 +37,11 @@ void GameScene::Initialize() {
 	//worldTransform_.Initialize();
 
 	viewProjection_.Initialize();
-	
+
 	//マップチップ
 	mapChipField_ = new MapChipField;
-	mapChipField_->LoadMapChipCsv("Resources/block.csv");
-
-
+	mapChipField_->LoadMapChipCsv("Resources/block.csv");	
+	
 	//自キャラ生成
 	player_ = new Player();
 
@@ -50,10 +49,11 @@ void GameScene::Initialize() {
 
 	player_->Initialize(modelPlayer_, &viewProjection_,playerPosition);
 
+	player_->SetMapChipField(mapChipField_);
 
 	//デバッグカメラ
 	debugCamera_ = new DebugCamera(1280, 720);
-	
+
 
 	//GenerateBlocks();
 		
@@ -81,7 +81,7 @@ void GameScene::Initialize() {
 				continue;
 			}
 		}
-	}
+	}	
 }
 
 void GameScene::Update() {
