@@ -13,7 +13,7 @@ public:
 
 	void Update();
 
-	void Draw(DebugCamera* debug);
+	void Draw();
 
 	const WorldTransform& GetWorldTransform() const{ return worldTransform_; }
 	const Vector3& Getvelocity() const { return velocity_; }

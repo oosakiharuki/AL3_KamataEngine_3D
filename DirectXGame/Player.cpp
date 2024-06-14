@@ -107,7 +107,7 @@ void Player::Update() {
 	}
 }
 
-void Player::Draw(DebugCamera* debug) {
+void Player::Draw() {
 	model_->Draw(worldTransform_, *viewProjection_);
-	model_->Draw(worldTransform_, debug->GetViewProjection());
+	//model_->Draw(worldTransform_, debug->GetViewProjection());
 }

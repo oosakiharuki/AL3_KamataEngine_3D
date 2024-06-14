@@ -151,7 +151,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	// 自キャラ描画
-	player_->Draw(debugCamera_);
+	player_->Draw();
 
 	for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformLine) {
