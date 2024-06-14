@@ -1,6 +1,5 @@
 #include "Model.h"
 #include "WorldTransform.h"
-#include "MyMath.h"
 #include "DebugCamera.h"
 
 enum class LRDirection {
@@ -17,6 +16,7 @@ public:
 	void Draw(DebugCamera* debug);
 
 	const WorldTransform& GetWorldTransform() const{ return worldTransform_; }
+	const Vector3& Getvelocity() const { return velocity_; }
 
 private:
 	WorldTransform worldTransform_;
@@ -48,5 +48,12 @@ private:
 
 	bool landing = false;
 
-	MyMath* myMath;
+
+	Vector3 Add(const Vector3& v1, const Vector3& v2) {
+		Vector3 result;
+		result.x = v1.x + v2.x;
+		result.y = v1.y + v2.y;
+		result.z = v1.z + v2.z;
+		return result;
+	}
 };

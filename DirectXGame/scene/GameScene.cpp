@@ -53,10 +53,13 @@ void GameScene::Initialize() {
 
 
 	cameraController_ = new CameraController;
-
 	cameraController_->Inyialize();
-
+	cameraController_->SetTarget(player_);
 	cameraController_->Reset();
+
+
+	
+
 
 
 
@@ -155,11 +158,15 @@ void GameScene::Draw() {
 			if (!worldTransformBlock) {
 				continue;
 			} 
-			else if (isDebugCameraActive_ == true) {
-				modelBlock_->Draw(*worldTransformBlock, debugCamera_->GetViewProjection());
-			}
+			//else if (isDebugCameraActive_ == true) {
+			//	modelBlock_->Draw(*worldTransformBlock, debugCamera_->GetViewProjection());
+			//}
 			else {
 				modelBlock_->Draw(*worldTransformBlock, viewProjection_);
+				viewProjection_.matView = cameraController_->GetViewProjection().matView;
+				viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
+				//ビュープロジェクション行列の転送
+				viewProjection_.TransferMatrix();
 			}
 		}
 	}
