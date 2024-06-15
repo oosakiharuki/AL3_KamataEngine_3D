@@ -66,10 +66,10 @@ void Player::MapChipCollision(CollisionMapInfo& info) {
 
 
 	if (hit) {
-		indexSet = mapChipField_->GetMapChipIntexSetByPosition(velocity_);
+		indexSet = mapChipField_->GetMapChipIntexSetByPosition(Add(worldTransform_.translation_ , Vector3(0,kHeight / 2.0f,0)));
 	
 		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIntex,indexSet.yIntex);
-		info.moveCount.y = std::max(0.0f,velocity_.y);
+		info.moveCount.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - (kHeight / 2.0f + kblank));
 
 		info.ceilingTachiFlag_ = true;
 	}

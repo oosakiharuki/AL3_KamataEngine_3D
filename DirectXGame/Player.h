@@ -1,6 +1,5 @@
 #include "Model.h"
 #include "WorldTransform.h"
-
 #include "DebugCamera.h"
 
 class MapChipField;
@@ -29,6 +28,8 @@ public:
 
 	void Draw(DebugCamera* debug);
 
+	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
+	const Vector3& Getvelocity() const { return velocity_; }
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 

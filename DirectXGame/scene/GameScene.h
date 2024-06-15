@@ -13,6 +13,7 @@
 #include<vector>
 
 #include "MapChipField.h"
+#include "CameraController.h"
 
 /// <summary>
 /// ゲームシーン
@@ -76,6 +77,9 @@ private: // メンバ変数
 
 	//自分キャラ
 	Player* player_ = nullptr;
+	
+	// カメラコントロール
+	CameraController* cameraController_;
 
 	//デバッグ
 	bool isDebugCameraActive_ = false;
