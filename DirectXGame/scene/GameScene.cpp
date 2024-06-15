@@ -146,16 +146,17 @@ void GameScene::Draw() {
 	/// </summary>
 
 	// 自キャラ描画
-	player_->Draw(debugCamera_);
+	player_->Draw();
 
 	for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformLine) {
 			if (!worldTransformBlock) {
 				continue;
 			} 
-			//else if (isDebugCameraActive_ == true) {
-			//	modelBlock_->Draw(*worldTransformBlock, debugCamera_->GetViewProjection());
-			//}
+			else if (isDebugCameraActive_ == true) {
+				modelBlock_->Draw(*worldTransformBlock, debugCamera_->GetViewProjection());
+				player_->DebugDraw(debugCamera_);
+			}
 			else {
 				modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 				viewProjection_.matView = cameraController_->GetViewProjection().matView;
