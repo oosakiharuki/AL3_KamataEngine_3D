@@ -8,6 +8,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Player.h"
+#include "Enemy.h"
 
 #include "DebugCamera.h"
 #include<vector>
@@ -66,7 +67,7 @@ private: // メンバ変数
 	//3Dモデルデータ
 	Model* modelPlayer_ = nullptr;
 	Model* modelBlock_ = nullptr;
-
+	Model* modelEnemy_ = nullptr;
 
 	//WorldTransform worldTransform_;
 
@@ -77,7 +78,10 @@ private: // メンバ変数
 
 	//自分キャラ
 	Player* player_ = nullptr;
-	
+
+	//敵キャラ
+	Enemy* enemy_ = nullptr;
+
 	// カメラコントロール
 	CameraController* cameraController_;
 

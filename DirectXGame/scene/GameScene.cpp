@@ -11,6 +11,7 @@ GameScene::GameScene() {
 GameScene::~GameScene() { 
 	delete modelPlayer_; 
 	delete modelBlock_;
+	delete modelEnemy_; 
 	for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformLine) {
 			delete worldTransformBlock;
@@ -19,6 +20,7 @@ GameScene::~GameScene() {
 	}
 
 	delete player_;
+	delete enemy_;
 	delete debugCamera_;
 
 	delete mapChipField_;
@@ -34,6 +36,7 @@ void GameScene::Initialize() {
 	//3Dモデル
 	modelPlayer_ = Model::CreateFromOBJ("player",true);
 	modelBlock_ = Model::CreateFromOBJ("block",true);
+	modelEnemy_ = Model::Create();
 
 	//worldTransform_.Initialize();
 
@@ -52,7 +55,15 @@ void GameScene::Initialize() {
 
 	player_->SetMapChipField(mapChipField_);
 
-	
+
+	//敵キャラ生成
+	enemy_ = new Enemy();
+
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(9, 18);
+
+	enemy_->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
+
+
 	//カメラ
 	cameraController_ = new CameraController;
 	cameraController_->Inyialize();
@@ -95,7 +106,7 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	// 自キャラ更新
 	player_->Update();
-
+	enemy_->Updata();
 	for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformLine) {
 			if (!worldTransformBlock) {
@@ -147,7 +158,7 @@ void GameScene::Draw() {
 
 	// 自キャラ描画
 	player_->Draw();
-
+	enemy_->Draw();
 	for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformLine) {
 			if (!worldTransformBlock) {
