@@ -42,6 +42,14 @@ public:
 	};
 
 	void MapChipCollision(CollisionMapInfo& info);
+
+	void MapChipCollisionUp(CollisionMapInfo& info);
+	void MapChipCollisionDown(CollisionMapInfo& info);
+	void MapChipCollisionRight(CollisionMapInfo& info);
+	void MapChipCollisionLeft(CollisionMapInfo& info);
+
+	void MapChipCollisionGround(CollisionMapInfo& info);
+	void MapChipCollisionWall(CollisionMapInfo& info);
 	
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
@@ -85,6 +93,9 @@ private:
 	bool landing = false;
 
 	static inline float kblank = 0.8f;
+
+	static inline const float kAttenuationLanding = 0.8f;
+
 
 	Vector3 Add(const Vector3& v1, const Vector3 v2) {
 		Vector3 result;

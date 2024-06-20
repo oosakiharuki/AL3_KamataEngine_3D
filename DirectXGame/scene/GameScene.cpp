@@ -33,7 +33,7 @@ void GameScene::Initialize() {
 
 	//3Dモデル
 	modelPlayer_ = Model::CreateFromOBJ("player",true);
-	modelBlock_ = Model::Create();
+	modelBlock_ = Model::CreateFromOBJ("block",true);
 
 	//worldTransform_.Initialize();
 
