@@ -36,7 +36,7 @@ void GameScene::Initialize() {
 	//3Dモデル
 	modelPlayer_ = Model::CreateFromOBJ("player",true);
 	modelBlock_ = Model::CreateFromOBJ("block",true);
-	modelEnemy_ = Model::Create();
+	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
 
 	//worldTransform_.Initialize();
 
@@ -59,7 +59,7 @@ void GameScene::Initialize() {
 	//敵キャラ生成
 	enemy_ = new Enemy();
 
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(9, 18);
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(10, 18);
 
 	enemy_->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 

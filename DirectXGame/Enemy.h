@@ -13,6 +13,12 @@ private:
 	ViewProjection* viewProjection_;
 	WorldTransform worldTransform_;
 	
-	static inline float kWalkSpeed = 1.0f;
+	static inline float kWalkSpeed = 0.01f;
+	static inline float kWalkMotionAngleStart = 1.0f;
+	static inline float kWalkMotionAngleEnd = -1.0f;
+	static inline float kWalkMotionAngletime = 2.0f;
+
+	float walkTimer_ = 0.0f;
+
 	Vector3 velocity_ = {};
 };
