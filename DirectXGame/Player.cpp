@@ -24,10 +24,10 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
 	Vector3 offsetTable[kNumCorner] = {
 
-	    {+kWidth / 2.0f, -kHeight / 2.0f, 0.0f},
-	    {-kWidth / 2.0f, -kHeight / 2.0f, 0.0f},
-	    {+kWidth / 2.0f, +kHeight / 2.0f, 0.0f},
-	    {-kWidth / 2.0f, +kHeight / 2.0f, 0.0f},
+	    {+kWidth / 2.0f, -kHeight / 2.0f, 0.0f},//kRightBottom
+	    {-kWidth / 2.0f, -kHeight / 2.0f, 0.0f},//kLeftBottom
+	    {+kWidth / 2.0f, +kHeight / 2.0f, 0.0f},//kRightTop
+	    {-kWidth / 2.0f, +kHeight / 2.0f, 0.0f},//kLeftTop
 	};
 
 	return Add(center , offsetTable[static_cast<uint32_t>(corner)]);
@@ -86,7 +86,7 @@ void Player::MapChipCollisionGround(CollisionMapInfo& info) {
 		if (info.landingFlag_) {
 			onGraund_ = true;
 
-			velocity_.x *= (1.0f - kAttenuationLanding);
+			//velocity_.x *= (1.0f - kAttenuationLanding);
 
 			velocity_.y = 0.0f;
 		}
@@ -223,14 +223,32 @@ void Player::MapChipCollisionRight(CollisionMapInfo& info) {
 		hit = true;
 	}
 
+	//if (hit) {
+	//	indexSet = mapChipField_->GetMapChipIntexSetByPosition(
+	//	    Add(worldTransform_.translation_, Vector3(kWidth / 2.0f,0, 0)));
+
+	//	MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIntex, indexSet.yIntex);
+	//	info.moveCount.x = std::min(0.0f ,rect.left - worldTransform_.translation_.x + (kWidth / 2.0f + kblank) );
+
+	//	info.wallTachiFlag_ = true;
+	//}
+
 	if (hit) {
-		indexSet = mapChipField_->GetMapChipIntexSetByPosition(
-		    Add(worldTransform_.translation_, Vector3(kWidth / 2.0f,0, 0)));
+		MapChipField::IndexSet indexSetNow;
+		indexSetNow = mapChipField_->GetMapChipIntexSetByPosition(
+		    Add(worldTransform_.translation_, Vector3(-kWidth / 2.0f, 0, 0)));
 
-		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIntex, indexSet.yIntex);
-		info.moveCount.x = std::min(rect.left - worldTransform_.translation_.x - (kWidth / 2.0f + kblank) , 0.0f );
+		if (indexSetNow.xIntex != indexSet.xIntex) {
 
-		info.wallTachiFlag_ = true;
+			indexSet = mapChipField_->GetMapChipIntexSetByPosition(
+				Add(worldTransform_.translation_, Add(info.moveCount, Vector3(-kWidth / 2.0f, 0, 0))));
+
+			MapChipField::Rect rect =
+			    mapChipField_->GetRectByIndex(indexSet.xIntex, indexSet.yIntex);
+			info.moveCount.x = std::min(0.0f, rect.right - worldTransform_.translation_.x + (-kWidth / 2.0f + kblank));
+
+			info.wallTachiFlag_ = true;
+		}
 	}
 }
 
@@ -252,14 +270,14 @@ void Player::MapChipCollisionLeft(CollisionMapInfo& info) {
 
 	indexSet = mapChipField_->GetMapChipIntexSetByPosition(positionNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex, indexSet.yIntex);
-	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex + 1, indexSet.yIntex);
+	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex -1, indexSet.yIntex);
 	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
 	}
 
 	indexSet = mapChipField_->GetMapChipIntexSetByPosition(positionNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex, indexSet.yIntex);
-	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex + 1, indexSet.yIntex);
+	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex - 1, indexSet.yIntex);
 	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
 	}
@@ -267,15 +285,14 @@ void Player::MapChipCollisionLeft(CollisionMapInfo& info) {
 	if (hit) {
 		MapChipField::IndexSet indexSetNow;
 		indexSetNow = mapChipField_->GetMapChipIntexSetByPosition(
-		    Add(worldTransform_.translation_, Vector3(-kWidth / 2.0f, 0, 0)));
+		    Add(worldTransform_.translation_, Vector3(kWidth / 2.0f, 0, 0)));
 
 		if (indexSetNow.xIntex != indexSet.xIntex) {
 
 			indexSet = mapChipField_->GetMapChipIntexSetByPosition(
-			    Add(worldTransform_.translation_,Add(info.moveCount, Vector3(-kWidth / 2.0f, 0, 0))));
+				Add(worldTransform_.translation_,Add(info.moveCount, Vector3(kWidth / 2.0f, 0, 0))));
 
-			MapChipField::Rect rect =
-			    mapChipField_->GetRectByIndex(indexSet.xIntex, indexSet.yIntex);
+			MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIntex, indexSet.yIntex);
 			info.moveCount.x = std::min(0.0f, rect.left - worldTransform_.translation_.x + (kWidth / 2.0f + kblank));
 
 			info.wallTachiFlag_ = true;
@@ -288,18 +305,20 @@ void Player::MapChipCollisionLeft(CollisionMapInfo& info) {
 
 void Player::Update() {
 	worldTransform_.TransferMatrix();
+		
+	CollisionMapInfo collisionMapInfo_;
 
 	if (onGraund_) {
 
 		//1
 		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
 
-			Vector3 acceleration = {};
+			Vector3 acceleration = {};	
 			if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
 
 				if (velocity_.x < 0.0f) {
 					acceleration.x *= (1.0f - kAttenuation);
-				}
+				}				
 				acceleration.x += kAcceleration;
 
 				if (lrDirection_ != LRDirection::kRight) {
@@ -378,9 +397,8 @@ void Player::Update() {
 
 		//2
 		//collision
-		CollisionMapInfo collisionMapInfo_;
+
 		collisionMapInfo_.moveCount = velocity_;
-	    //collisionMapInfo_.landingFlag_ = landing;
 
 		MapChipCollision(collisionMapInfo_);
 
@@ -392,7 +410,6 @@ void Player::Update() {
 		CollisionWall(collisionMapInfo_);
 
 		MapChipCollisionGround(collisionMapInfo_);
-
 
 }
 
