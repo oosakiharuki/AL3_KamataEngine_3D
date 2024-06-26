@@ -1,6 +1,5 @@
 #include "GameScene.h"
 #include "TextureManager.h"
-#include "MyMath.h"
 #include <cassert>
 
 
@@ -20,7 +19,9 @@ GameScene::~GameScene() {
 	}
 
 	delete player_;
-	delete enemy_;
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
 	delete debugCamera_;
 
 	delete mapChipField_;
@@ -36,7 +37,8 @@ void GameScene::Initialize() {
 	//3Dモデル
 	modelPlayer_ = Model::CreateFromOBJ("player",true);
 	modelBlock_ = Model::CreateFromOBJ("block",true);
-	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
+	modelEnemy_ = Model::CreateFromOBJ("enemy", true) ,
+
 
 	//worldTransform_.Initialize();
 
@@ -57,12 +59,15 @@ void GameScene::Initialize() {
 
 
 	//敵キャラ生成
-	enemy_ = new Enemy();
+	for (int32_t i = 0; i < 1; i++) {
 
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(10, 18);
+		Enemy* enemy_ = new Enemy();
 
-	enemy_->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(10 + i * 3, 18);
+		enemy_->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 
+		enemies_.push_back(enemy_);
+	}
 
 	//カメラ
 	cameraController_ = new CameraController;
@@ -103,10 +108,42 @@ void GameScene::Initialize() {
 	}	
 }
 
+
+bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
+	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) &&
+	    (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) &&
+	    (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z)) {
+		return true;
+	}
+	return false;
+}
+
+
+
+void GameScene::CheckAllCollisions() {
+	// player and enemy
+	AABB aabb1, aabb2;
+
+	aabb1 = player_->GetAABB();
+
+	for (Enemy* enemy : enemies_) {
+		aabb2 = enemy->GetAABB();
+
+		if (IsCollision(aabb1,aabb2)) {
+			player_->OnCollision(enemy);
+			enemy->OnCollision(player_);
+		}
+
+	}
+
+}
+
 void GameScene::Update() {
 	// 自キャラ更新
 	player_->Update();
-	enemy_->Updata();
+	for (Enemy* enemy : enemies_) {
+		enemy->Updata();
+	}
 	for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformLine) {
 			if (!worldTransformBlock) {
@@ -116,6 +153,11 @@ void GameScene::Update() {
 			}
 		}
 	}
+
+
+	CheckAllCollisions();
+
+
 	cameraController_->Update();
 
 	debugCamera_->Update();
@@ -158,7 +200,9 @@ void GameScene::Draw() {
 
 	// 自キャラ描画
 	player_->Draw();
-	enemy_->Draw();
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw();
+	}
 	for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformLine) {
 			if (!worldTransformBlock) {

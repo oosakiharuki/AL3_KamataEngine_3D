@@ -80,7 +80,14 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 
 	//敵キャラ
-	Enemy* enemy_ = nullptr;
+	//Enemy* enemy_ = nullptr;
+
+	std::list<Enemy*> enemies_;
+
+	bool IsCollision(const AABB& aabb1, const AABB& aabb2);
+	void CheckAllCollisions();
+
+
 
 	// カメラコントロール
 	CameraController* cameraController_;

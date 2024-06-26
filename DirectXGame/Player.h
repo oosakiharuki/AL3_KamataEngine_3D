@@ -2,6 +2,7 @@
 #include "WorldTransform.h"
 #include "DebugCamera.h"
 
+#include "MyMath.h"
 class MapChipField;
 
 enum class LRDirection {
@@ -18,6 +19,8 @@ enum Corner {
 	kNumCorner
 
 };
+
+class Enemy; 
 
 class Player {
 
@@ -59,6 +62,11 @@ public:
 	void prosperity(const CollisionMapInfo& info);//hantei
 
 	void CeilingTachi(const CollisionMapInfo& info);
+
+	Vector3 GetWorldPosition();
+	AABB GetAABB();
+
+	void OnCollision(const Enemy* enemy);
 
 private:
 	MapChipField* mapChipField_ = nullptr;

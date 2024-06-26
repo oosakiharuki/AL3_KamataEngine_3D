@@ -282,6 +282,31 @@ void Player::MapChipCollisionWall(CollisionMapInfo& info) {
 
 }
 
+AABB Player::GetAABB() {
+	Vector3 worldPos_ = GetWorldPosition();
+
+	AABB aabb;
+	aabb.min = {
+	    worldPos_.x - kWidth / 2.0f, worldPos_.y - kHeight / 2.0f, worldPos_.z - kWidth / 2.0f};
+	aabb.max = {
+	    worldPos_.x + kWidth / 2.0f, worldPos_.y + kHeight / 2.0f, worldPos_.z + kWidth / 2.0f};
+
+	return aabb;
+};
+
+Vector3 Player::GetWorldPosition() { 
+	Vector3 worldPos_;
+	worldPos_.x = worldTransform_.matWorld_.m[3][0];
+	worldPos_.y = worldTransform_.matWorld_.m[3][1];
+	worldPos_.z = worldTransform_.matWorld_.m[3][2];
+	return worldPos_;
+}
+
+void Player::OnCollision(const Enemy* enemy) {
+	(void)enemy;
+	velocity_.y += 3.0f;
+}
+
 
 
 
@@ -389,9 +414,6 @@ void Player::Update() {
 		prosperity(collisionMapInfo_);
 		//4
 		CeilingTachi(collisionMapInfo_);
-
-
-
 
 
 }

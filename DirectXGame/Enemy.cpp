@@ -20,6 +20,31 @@ void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vecto
 	walkTimer_ = 0.0f;
 }
 
+Vector3 Enemy::GetWorldPosition() {
+	Vector3 worldPos_;
+	worldPos_.x = worldTransform_.matWorld_.m[3][0];
+	worldPos_.y = worldTransform_.matWorld_.m[3][1];
+	worldPos_.z = worldTransform_.matWorld_.m[3][2];
+	return worldPos_;
+}
+
+AABB Enemy::GetAABB() {
+	Vector3 worldPos_ = GetWorldPosition();
+
+	AABB aabb;
+	aabb.min = {
+	    worldPos_.x - kWidth / 2.0f, worldPos_.y - kHeight / 2.0f, worldPos_.z - kWidth / 2.0f};
+	aabb.max = {
+	    worldPos_.x + kWidth / 2.0f, worldPos_.y + kHeight / 2.0f, worldPos_.z + kWidth / 2.0f};
+
+	return aabb;
+};
+
+void Enemy::OnCollision(const Player* player) { 
+	(void)player;
+}
+
+
 void Enemy::Updata() { 
 	worldTransform_.translation_.x += velocity_.x;
 	worldTransform_.translation_.y += velocity_.y;

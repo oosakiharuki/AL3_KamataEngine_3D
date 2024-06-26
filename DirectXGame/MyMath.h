@@ -1,7 +1,10 @@
 #include "Matrix4x4.h"
 #include "Vector3.h"
 #include <cmath>
-
+struct AABB {
+	Vector3 min;
+	Vector3 max;
+};
 #pragma once
 class MyMath {
 
