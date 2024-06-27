@@ -16,6 +16,8 @@
 #include "MapChipField.h"
 #include "CameraController.h"
 
+#include "DeathParticles.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -68,6 +70,7 @@ private: // メンバ変数
 	Model* modelPlayer_ = nullptr;
 	Model* modelBlock_ = nullptr;
 	Model* modelEnemy_ = nullptr;
+	Model* modelParticles_ = nullptr;
 
 	//WorldTransform worldTransform_;
 
@@ -88,6 +91,9 @@ private: // メンバ変数
 	void CheckAllCollisions();
 
 
+	//パーティクル
+	DeathParticles* deathParticles_ = nullptr;
+	bool DeathFlag = true;
 
 	// カメラコントロール
 	CameraController* cameraController_;

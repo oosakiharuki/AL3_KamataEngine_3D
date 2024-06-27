@@ -22,6 +22,10 @@ GameScene::~GameScene() {
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
+
+	delete deathParticles_;
+
+
 	delete debugCamera_;
 
 	delete mapChipField_;
@@ -37,8 +41,8 @@ void GameScene::Initialize() {
 	//3Dモデル
 	modelPlayer_ = Model::CreateFromOBJ("player",true);
 	modelBlock_ = Model::CreateFromOBJ("block",true);
-	modelEnemy_ = Model::CreateFromOBJ("enemy", true) ,
-
+	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
+	modelParticles_ = Model::CreateFromOBJ("deathParticle",true);
 
 	//worldTransform_.Initialize();
 
@@ -68,6 +72,12 @@ void GameScene::Initialize() {
 
 		enemies_.push_back(enemy_);
 	}
+
+	//パーティクル生成
+	deathParticles_ = new DeathParticles();
+	deathParticles_->Initialize(modelParticles_, &viewProjection_, playerPosition);
+	DeathFlag = true;
+
 
 	//カメラ
 	cameraController_ = new CameraController;
@@ -141,6 +151,7 @@ void GameScene::CheckAllCollisions() {
 void GameScene::Update() {
 	// 自キャラ更新
 	player_->Update();
+
 	for (Enemy* enemy : enemies_) {
 		enemy->Updata();
 	}
@@ -154,6 +165,9 @@ void GameScene::Update() {
 		}
 	}
 
+	if (DeathFlag) {
+		deathParticles_->Updata();
+	}
 
 	CheckAllCollisions();
 
@@ -203,6 +217,11 @@ void GameScene::Draw() {
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
 	}
+
+	if (DeathFlag) {
+		deathParticles_->Draw();
+	}
+
 	for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformLine) {
 			if (!worldTransformBlock) {
