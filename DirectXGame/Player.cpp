@@ -95,8 +95,8 @@ void Player::MapChipCollisionGround(CollisionMapInfo& info) {
 }
 
 void Player::prosperity(const CollisionMapInfo& info) {
-	//worldTransform_.translation_.x += info.moveCount.x;
-	//worldTransform_.translation_.y += info.moveCount.y;
+	worldTransform_.translation_.x += info.moveCount.x;
+	worldTransform_.translation_.y += info.moveCount.y;
 	worldTransform_.translation_.z += info.moveCount.z;
 }
 
@@ -223,32 +223,14 @@ void Player::MapChipCollisionRight(CollisionMapInfo& info) {
 		hit = true;
 	}
 
-	//if (hit) {
-	//	indexSet = mapChipField_->GetMapChipIntexSetByPosition(
-	//	    Add(worldTransform_.translation_, Vector3(kWidth / 2.0f,0, 0)));
-
-	//	MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIntex, indexSet.yIntex);
-	//	info.moveCount.x = std::min(0.0f ,rect.left - worldTransform_.translation_.x + (kWidth / 2.0f + kblank) );
-
-	//	info.wallTachiFlag_ = true;
-	//}
-
 	if (hit) {
-		MapChipField::IndexSet indexSetNow;
-		indexSetNow = mapChipField_->GetMapChipIntexSetByPosition(
-		    Add(worldTransform_.translation_, Vector3(-kWidth / 2.0f, 0, 0)));
+		indexSet = mapChipField_->GetMapChipIntexSetByPosition(
+		    Add(worldTransform_.translation_, Vector3(-kWidth / 2.0f,0, 0)));
 
-		if (indexSetNow.xIntex != indexSet.xIntex) {
+		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIntex, indexSet.yIntex);
+		info.moveCount.x = std::min(0.0f ,rect.right - worldTransform_.translation_.x + (-kWidth / 2.0f + kblank) );
 
-			indexSet = mapChipField_->GetMapChipIntexSetByPosition(
-				Add(worldTransform_.translation_, Add(info.moveCount, Vector3(-kWidth / 2.0f, 0, 0))));
-
-			MapChipField::Rect rect =
-			    mapChipField_->GetRectByIndex(indexSet.xIntex, indexSet.yIntex);
-			info.moveCount.x = std::min(0.0f, rect.right - worldTransform_.translation_.x + (-kWidth / 2.0f + kblank));
-
-			info.wallTachiFlag_ = true;
-		}
+		info.wallTachiFlag_ = true;
 	}
 }
 
@@ -263,40 +245,32 @@ void Player::MapChipCollisionLeft(CollisionMapInfo& info) {
 		    Add(worldTransform_.translation_, info.moveCount), static_cast<Corner>(i));
 	}
 
-	MapChipType mapChipType, mapChipTypeNext;
+	MapChipType mapChipType;
 	bool hit = false;
 
 	MapChipField::IndexSet indexSet;
 
 	indexSet = mapChipField_->GetMapChipIntexSetByPosition(positionNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex, indexSet.yIntex);
-	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex -1, indexSet.yIntex);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
 
 	indexSet = mapChipField_->GetMapChipIntexSetByPosition(positionNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex, indexSet.yIntex);
-	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex - 1, indexSet.yIntex);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
 
 	if (hit) {
-		MapChipField::IndexSet indexSetNow;
-		indexSetNow = mapChipField_->GetMapChipIntexSetByPosition(
+		indexSet = mapChipField_->GetMapChipIntexSetByPosition(
 		    Add(worldTransform_.translation_, Vector3(kWidth / 2.0f, 0, 0)));
 
-		if (indexSetNow.xIntex != indexSet.xIntex) {
+		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIntex, indexSet.yIntex);
+		info.moveCount.x =
+		    std::min(0.0f, rect.left - worldTransform_.translation_.x + (kWidth / 2.0f + kblank));
 
-			indexSet = mapChipField_->GetMapChipIntexSetByPosition(
-				Add(worldTransform_.translation_,Add(info.moveCount, Vector3(kWidth / 2.0f, 0, 0))));
-
-			MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIntex, indexSet.yIntex);
-			info.moveCount.x = std::min(0.0f, rect.left - worldTransform_.translation_.x + (kWidth / 2.0f + kblank));
-
-			info.wallTachiFlag_ = true;
-		}
+		info.wallTachiFlag_ = true;
 	}
 }
 
@@ -379,8 +353,8 @@ void Player::Update() {
 		landing = false;
 	}
 
-	worldTransform_.translation_.x += velocity_.x;
-	worldTransform_.translation_.y += velocity_.y;
+	//worldTransform_.translation_.x += velocity_.x;
+	//worldTransform_.translation_.y += velocity_.y;
 	worldTransform_.UpdateMatrix();
 
 	if (turnTimer_ > 0.0f) {

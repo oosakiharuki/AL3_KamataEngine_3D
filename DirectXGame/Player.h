@@ -93,12 +93,12 @@ private:
 
 	bool landing = false;
 
-	float positionNewSpace = 0.2f;
+	float positionNewSpace = 0.15f;
 
-	static inline float kblank = 0.6f;
+	static inline float kblank = 0.1f;
 
 	static inline const float kAttenuationLanding = 0.8f;
-	static inline const float kAttenuationWall = 0.6f;
+	static inline const float kAttenuationWall = 0.1f;
 
 	Vector3 Add(const Vector3& v1, const Vector3& v2) {
 		Vector3 result{};
