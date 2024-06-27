@@ -61,6 +61,8 @@ void Player::MapChipCollisionGround(CollisionMapInfo& info) {
 			MapChipType mapChipType;
 
 			bool hit = false;
+			bool hit2 = false;
+
 			MapChipField::IndexSet indexSet;
 
 			indexSet = mapChipField_->GetMapChipIntexSetByPosition(
@@ -74,10 +76,10 @@ void Player::MapChipCollisionGround(CollisionMapInfo& info) {
 			    Add(positionNew[kRightBottom], Vector3(0, -positionNewSpace, 0)));
 			mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex, indexSet.yIntex);
 			if (mapChipType == MapChipType::kBlock) {
-				hit = true;
+				hit2 = true;
 			}
 
-			if (!hit) {
+			if (!hit && !hit2) {
 				onGraund_ = false;
 			}	
 		}
@@ -122,6 +124,7 @@ void Player::MapChipCollisionUp(CollisionMapInfo& info) {
 
 	MapChipType mapChipType;
 	bool hit = false;
+	bool hit2 = false;
 
 	MapChipField::IndexSet indexSet;
 	
@@ -134,11 +137,11 @@ void Player::MapChipCollisionUp(CollisionMapInfo& info) {
 	indexSet = mapChipField_->GetMapChipIntexSetByPosition(positionNew[kRightTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex, indexSet.yIntex);
 	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
+		hit2 = true;
 	}
 
 
-	if (hit) {
+	if (hit && hit2) {
 		indexSet = mapChipField_->GetMapChipIntexSetByPosition(Add(worldTransform_.translation_ , Vector3(0,kHeight / 2.0f,0)));
 	
 		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIntex,indexSet.yIntex);
@@ -163,6 +166,7 @@ void Player::MapChipCollisionDown(CollisionMapInfo& info) {
 
 	MapChipType mapChipType;
 	bool hit = false;
+	bool hit2 = false;
 
 	MapChipField::IndexSet indexSet;
 
@@ -175,10 +179,10 @@ void Player::MapChipCollisionDown(CollisionMapInfo& info) {
 	indexSet = mapChipField_->GetMapChipIntexSetByPosition(positionNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex, indexSet.yIntex);
 	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
+		hit2 = true;
 	}
 
-	if (hit) {
+	if (hit && hit2) {
 		indexSet = mapChipField_->GetMapChipIntexSetByPosition(
 		    Add(worldTransform_.translation_, Vector3(0, -kHeight / 2.0f, 0)));
 
@@ -208,6 +212,7 @@ void Player::MapChipCollisionRight(CollisionMapInfo& info) {
 
 	MapChipType mapChipType;
 	bool hit = false;
+	bool hit2 = false;
 
 	MapChipField::IndexSet indexSet;
 
@@ -220,10 +225,10 @@ void Player::MapChipCollisionRight(CollisionMapInfo& info) {
 	indexSet = mapChipField_->GetMapChipIntexSetByPosition(positionNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex, indexSet.yIntex);
 	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
+		hit2 = true;
 	}
 
-	if (hit) {
+	if (hit && hit2) {
 		indexSet = mapChipField_->GetMapChipIntexSetByPosition(
 		    Add(worldTransform_.translation_, Vector3(-kWidth / 2.0f,0, 0)));
 
@@ -247,6 +252,7 @@ void Player::MapChipCollisionLeft(CollisionMapInfo& info) {
 
 	MapChipType mapChipType;
 	bool hit = false;
+	bool hit2 = false;
 
 	MapChipField::IndexSet indexSet;
 
@@ -259,10 +265,10 @@ void Player::MapChipCollisionLeft(CollisionMapInfo& info) {
 	indexSet = mapChipField_->GetMapChipIntexSetByPosition(positionNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIntex, indexSet.yIntex);
 	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
+		hit2 = true;
 	}
 
-	if (hit) {
+	if (hit && hit2) {
 		indexSet = mapChipField_->GetMapChipIntexSetByPosition(
 		    Add(worldTransform_.translation_, Vector3(kWidth / 2.0f, 0, 0)));
 

@@ -95,7 +95,7 @@ private:
 
 	float positionNewSpace = 0.15f;
 
-	static inline float kblank = 0.1f;
+	static inline float kblank = 0.01f;
 
 	static inline const float kAttenuationLanding = 0.8f;
 	static inline const float kAttenuationWall = 0.1f;
