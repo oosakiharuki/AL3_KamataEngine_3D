@@ -1,7 +1,6 @@
 #include <array>
 #include "Model.h"
 #include "WorldTransform.h"
-//#include "ViewProjection.h"
 
 class DeathParticles{
 public:
@@ -11,7 +10,7 @@ public:
 
 private:
 
-	static inline const uint32_t kNumParticles = 0;
+	static inline const uint32_t kNumParticles = 8;
 
 	Model* model_ = nullptr;
 	ViewProjection* viewProjection_ = nullptr;
