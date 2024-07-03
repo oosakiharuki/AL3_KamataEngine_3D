@@ -1,6 +1,6 @@
+#include "DebugCamera.h"
 #include "Model.h"
 #include "WorldTransform.h"
-#include "DebugCamera.h"
 
 #include "MyMath.h"
 class MapChipField;
@@ -25,7 +25,7 @@ class Enemy;
 class Player {
 
 public:
-	void Initialize(Model* model,ViewProjection* viewProjection,const Vector3& position);
+	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
 
 	void Update();
 
@@ -52,22 +52,20 @@ public:
 	void MapChipCollisionLeft(CollisionMapInfo& info);
 
 	void MapChipCollisionGround(CollisionMapInfo& info);
-	void MapChipCollisionWall(CollisionMapInfo& info);
-	
+
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
 
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
 
-	void prosperity(const CollisionMapInfo& info);//hantei
+	void prosperity(const CollisionMapInfo& info); // hantei
 
 	void CeilingTachi(const CollisionMapInfo& info);
+	void CollisionWall(CollisionMapInfo& info);
 
 	Vector3 GetWorldPosition();
 	AABB GetAABB();
-
 	void OnCollision(const Enemy* enemy);
-
 private:
 	MapChipField* mapChipField_ = nullptr;
 
@@ -95,18 +93,20 @@ private:
 	bool onGraund_ = true;
 
 	static inline float kGravityAcceleration = 0.1f;
-	static inline float kLimitFallSpeed = 0.4f; 
+	static inline float kLimitFallSpeed = 0.4f;
 	static inline float kJumpAcceleration = 1.0f;
 
 	bool landing = false;
 
-	static inline float kblank = 0.8f;
+	float positionNewSpace = 0.15f;
 
-	static inline const float kAttenuationLanding = 0.8f;
+	static inline float kblank = 0.01f;
 
+	static inline const float kAttenuationLanding = 0.01f;
+	static inline const float kAttenuationWall = 0.1f;
 
-	Vector3 Add(const Vector3& v1, const Vector3 v2) {
-		Vector3 result;
+	Vector3 Add(const Vector3& v1, const Vector3& v2) {
+		Vector3 result{};
 		result.x = v1.x + v2.x;
 		result.y = v1.y + v2.y;
 		result.z = v1.z + v2.z;
