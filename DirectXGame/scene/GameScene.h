@@ -60,7 +60,7 @@ public: // メンバ関数
 
 	//void GenerateBlocks();
 	void ChangePhase();
-Phase phase_;
+	Phase phase_;
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;

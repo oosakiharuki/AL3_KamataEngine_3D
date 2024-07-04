@@ -68,6 +68,7 @@ public:
 	void OnCollision(const Enemy* enemy);
 
 	bool IsDeath() const { return isDeathFlag_; }
+	bool IsFinished() const { return finished_; }
 
 private:
 	MapChipField* mapChipField_ = nullptr;
@@ -117,4 +118,5 @@ private:
 	}
 
 	bool isDeathFlag_ = false;
+	bool finished_ = false;
 };

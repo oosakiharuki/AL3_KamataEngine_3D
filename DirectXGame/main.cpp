@@ -8,6 +8,62 @@
 #include "WinApp.h"
 #include "TitleScene.h"
 
+enum class Scene {
+
+	kUnkown = 0,
+
+	kTitle,
+	kGame,
+};
+	
+GameScene* gameScene = nullptr;
+TitleScene* titleScene = nullptr;
+
+Scene scene = Scene::kUnkown;
+
+
+void ChangeScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		if (titleScene->IsFinished()) {
+			scene = Scene::kGame;
+
+			delete titleScene;
+			titleScene = nullptr;
+
+			gameScene = new GameScene();
+			gameScene->Initialize();
+		}
+		break;
+	case Scene::kGame:
+
+		break;
+	}
+}
+
+void UpdataScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		titleScene->Updata();
+		break;
+	case Scene::kGame:
+		gameScene->Update();
+		break;
+	}
+}
+
+void DrawScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		titleScene->Draw();
+		break;
+	case Scene::kGame:
+		gameScene->Draw();
+		break;
+	}
+}
+
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* win = nullptr;
@@ -17,8 +73,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Audio* audio = nullptr;
 	AxisIndicator* axisIndicator = nullptr;
 	PrimitiveDrawer* primitiveDrawer = nullptr;
-	//GameScene* gameScene = nullptr;
-	TitleScene* titleScene = nullptr;
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
@@ -60,9 +114,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 	// ゲームシーンの初期化
-	//gameScene = new GameScene();
-	//gameScene->Initialize();
 
+	scene = Scene::kTitle;
 	//タイトル
 	titleScene = new TitleScene;
 	titleScene->Initialize();
@@ -82,7 +135,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// ゲームシーンの毎フレーム処理
 		//gameScene->Update();
 
-		titleScene->Updata();
+		ChangeScene();
+
+		UpdataScene();
 
 		// 軸表示の更新
 		axisIndicator->Update();
@@ -94,7 +149,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// ゲームシーンの描画
 		//gameScene->Draw();
 
-		titleScene->Draw();
+		DrawScene();
 
 		// 軸表示の描画
 		axisIndicator->Draw();
