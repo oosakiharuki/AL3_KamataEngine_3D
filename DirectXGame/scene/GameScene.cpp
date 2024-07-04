@@ -76,7 +76,7 @@ void GameScene::Initialize() {
 	//パーティクル生成
 	deathParticles_ = new DeathParticles();
 	deathParticles_->Initialize(modelParticles_, &viewProjection_, playerPosition);
-	DeathFlag = true;
+	DeathFlag = false;
 
 
 	//カメラ
@@ -116,6 +116,8 @@ void GameScene::Initialize() {
 			}
 		}
 	}	
+
+	phase_ = Phase::kPlay;
 }
 
 
@@ -148,41 +150,101 @@ void GameScene::CheckAllCollisions() {
 
 }
 
-void GameScene::Update() {
-	// 自キャラ更新
-	player_->Update();
+void GameScene::ChangePhase() {
+	switch (phase_) {
+	case Phase::kPlay:
 
-	for (Enemy* enemy : enemies_) {
-		enemy->Updata();
+		DeathFlag = player_->IsDeath();
+
+
+		if (DeathFlag) {
+			phase_ = Phase::kDeath;
+			const Vector3& deathParticlesPosition = player_->GetWorldPosition();
+
+			deathParticles_->Initialize(modelParticles_, &viewProjection_, deathParticlesPosition);
+		}
+
+
+
+		break;
+	case Phase::kDeath:
+
+		break;
 	}
-	for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformLine) {
-			if (!worldTransformBlock) {
-				continue;
-			} else {	
-				worldTransformBlock->UpdateMatrix();			
+}
+
+void GameScene::Update() {
+	
+	switch (phase_) {
+	case Phase::kPlay:
+		// 自キャラ更新
+		player_->Update();
+		// 敵キャラ更新
+		for (Enemy* enemy : enemies_) {
+			enemy->Updata();
+		}
+		// ブロック更新
+		for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
+			for (WorldTransform* worldTransformBlock : worldTransformLine) {
+				if (!worldTransformBlock) {
+					continue;
+				} else {
+					worldTransformBlock->UpdateMatrix();
+				}
 			}
 		}
+
+		// 全ての当たり判定
+		CheckAllCollisions();
+
+		ChangePhase();
+
+		// カメラコントローラの更新
+		cameraController_->Update();
+		// カメラの更新
+		debugCamera_->Update();
+
+#ifdef _DEBUG
+		if (input_->TriggerKey(DIK_SPACE)) {
+			isDebugCameraActive_ = true;
+		}
+#endif
+
+		break;
+	case Phase::kDeath:
+
+		// 敵キャラ更新
+		for (Enemy* enemy : enemies_) {
+			enemy->Updata();
+		}
+
+		// デスパーティクル更新
+		if (DeathFlag) {
+			deathParticles_->Updata();
+		}
+
+		// カメラの更新
+		debugCamera_->Update();
+
+#ifdef _DEBUG
+		if (input_->TriggerKey(DIK_SPACE)) {
+			isDebugCameraActive_ = true;
+		}
+#endif
+
+		// ブロック更新
+		for (std::vector<WorldTransform*> worldTransformLine : worldTransformBlocks_) {
+			for (WorldTransform* worldTransformBlock : worldTransformLine) {
+				if (!worldTransformBlock) {
+					continue;
+				} else {
+					worldTransformBlock->UpdateMatrix();
+				}
+			}
+		}
+
+		break;
 	}
-
-	if (DeathFlag) {
-		deathParticles_->Updata();
-	}
-
-	CheckAllCollisions();
-
-
-	cameraController_->Update();
-
-	debugCamera_->Update();
-
-#ifdef _DEBUG 
-	if (input_->TriggerKey(DIK_SPACE)) {
-		isDebugCameraActive_ = true;
-	}
-#endif 
-
-
 }
 
 void GameScene::Draw() {
@@ -213,7 +275,10 @@ void GameScene::Draw() {
 	/// </summary>
 
 	// 自キャラ描画
-	player_->Draw();
+	if (!DeathFlag) {
+		player_->Draw();
+	}
+
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
 	}

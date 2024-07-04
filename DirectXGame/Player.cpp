@@ -297,7 +297,7 @@ Vector3 Player::GetWorldPosition() {
 
 void Player::OnCollision(const Enemy* enemy) {
 	(void)enemy;
-	velocity_.y += 3.0f;
+	isDeathFlag_ = true;
 }
 
 void Player::Update() {

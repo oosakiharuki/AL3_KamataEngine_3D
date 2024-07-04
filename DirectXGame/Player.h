@@ -66,6 +66,9 @@ public:
 	Vector3 GetWorldPosition();
 	AABB GetAABB();
 	void OnCollision(const Enemy* enemy);
+
+	bool IsDeath() const { return isDeathFlag_; }
+
 private:
 	MapChipField* mapChipField_ = nullptr;
 
@@ -112,4 +115,6 @@ private:
 		result.z = v1.z + v2.z;
 		return result;
 	}
+
+	bool isDeathFlag_ = false;
 };

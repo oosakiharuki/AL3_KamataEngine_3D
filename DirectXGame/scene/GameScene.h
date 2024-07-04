@@ -18,6 +18,13 @@
 
 #include "DeathParticles.h"
 
+enum class Phase {
+	kPlay,//gameplay
+	kDeath,//death
+};
+
+
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -52,7 +59,8 @@ public: // メンバ関数
 
 
 	//void GenerateBlocks();
-
+	void ChangePhase();
+Phase phase_;
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -93,7 +101,7 @@ private: // メンバ変数
 
 	//パーティクル
 	DeathParticles* deathParticles_ = nullptr;
-	bool DeathFlag = true;
+	bool DeathFlag = false;
 
 	// カメラコントロール
 	CameraController* cameraController_;
