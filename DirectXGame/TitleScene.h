@@ -18,7 +18,7 @@ private:
 
 	WorldTransform worldTransform_;
 
-	uint32_t textureHandle_ = 0u;
+	//uint32_t textureHandle_ = 0u;
 
 	ViewProjection viewProjection_;
 
