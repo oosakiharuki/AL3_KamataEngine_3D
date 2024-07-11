@@ -9,6 +9,7 @@ class DeathParticles{
 public:
 	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
 	Matrix4x4 MakeRotateZMatrix(float rotate_);
+	bool Isfinfshed() { return isFinished_; }
 
 	void Updata();
 	void Draw();

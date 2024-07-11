@@ -118,6 +118,7 @@ void GameScene::Initialize() {
 	}	
 
 	phase_ = Phase::kPlay;
+	finished_ = false;
 }
 
 
@@ -221,6 +222,11 @@ void GameScene::Update() {
 		// デスパーティクル更新
 		if (DeathFlag) {
 			deathParticles_->Updata();
+		}
+
+
+		if (deathParticles_ && deathParticles_->Isfinfshed()) {
+			finished_ = true;
 		}
 
 		// カメラの更新

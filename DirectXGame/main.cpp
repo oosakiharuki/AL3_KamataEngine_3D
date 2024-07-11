@@ -36,7 +36,15 @@ void ChangeScene() {
 		}
 		break;
 	case Scene::kGame:
+		if (gameScene->IsFinished()) {
+			scene = Scene::kTitle;
 
+			delete gameScene;
+			gameScene = nullptr;
+
+			titleScene = new TitleScene();
+			titleScene->Initialize();
+		}
 		break;
 	}
 }
@@ -162,8 +170,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 
 	// 各種解放
-	//delete gameScene;
-	delete titleScene;
+	delete gameScene;
+	//delete titleScene;
 	// 3Dモデル解放
 	Model::StaticFinalize();
 	audio->Finalize();

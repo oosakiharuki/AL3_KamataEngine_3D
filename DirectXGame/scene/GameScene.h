@@ -61,6 +61,7 @@ public: // メンバ関数
 	//void GenerateBlocks();
 	void ChangePhase();
 	Phase phase_;
+	bool IsFinished() { return finished_; }
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -113,4 +114,5 @@ private: // メンバ変数
 
 	MapChipField* mapChipField_;
 
+	bool finished_ = false;
 };
