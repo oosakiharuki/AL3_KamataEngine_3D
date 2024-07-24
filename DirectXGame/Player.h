@@ -1,6 +1,9 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include"Input.h"
+#include "MyMath.h"
+#include "imgui.h"
+#include "DebugCamera.h"
 
 class Player {
 
@@ -10,8 +13,8 @@ public:
 	void Update();
 
 	void Draw();
-
-private:
+	void DebugDraw(DebugCamera* debug);
+	private:
 	WorldTransform worldTransform_;
 
 	Model* model_ = nullptr;
@@ -22,7 +25,11 @@ private:
 
 	Input* input_ = nullptr;
 
-	Vector3 move = {0, 0, 0};
-	const float kPlayerSpeed = 2.0f;
+
+	MyMath* myMath_ = nullptr;
+
+
+
+
 
 };
