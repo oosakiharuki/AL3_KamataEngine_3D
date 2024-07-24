@@ -1,5 +1,6 @@
 #include "Model.h"
 #include "WorldTransform.h"
+#include"Input.h"
 
 class Player {
 
@@ -18,4 +19,10 @@ private:
 	uint32_t textureHandle_ = 0u;
 
 	ViewProjection* viewProjection_ = nullptr;
+
+	Input* input_ = nullptr;
+
+	Vector3 move = {0, 0, 0};
+	const float kPlayerSpeed = 2.0f;
+
 };
