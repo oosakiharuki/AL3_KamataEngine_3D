@@ -61,8 +61,3 @@ void Player::Update() {
 void Player::Draw() {
 	model_->Draw(worldTransform_, *viewProjection_, textureHandle_);
 }
-
-
-void Player::DebugDraw(DebugCamera* debug) {
-	model_->Draw(worldTransform_, debug->GetViewProjection());
-}

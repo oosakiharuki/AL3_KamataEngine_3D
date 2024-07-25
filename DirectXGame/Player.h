@@ -3,7 +3,6 @@
 #include"Input.h"
 #include "MyMath.h"
 #include "imgui.h"
-#include "DebugCamera.h"
 
 class Player {
 
@@ -13,7 +12,7 @@ public:
 	void Update();
 
 	void Draw();
-	void DebugDraw(DebugCamera* debug);
+
 	private:
 	WorldTransform worldTransform_;
 
