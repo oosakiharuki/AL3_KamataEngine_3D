@@ -1,13 +1,14 @@
 #include "Audio.h"
 #include "DirectXCommon.h"
 #include "Input.h"
-
 #include "Model.h"
 #include "WorldTransform.h"
 #include "ViewProjection.h"
+#include "Fade.h"
 
 class TitleScene {
 public:
+	~TitleScene();
 	void Initialize();
 	void Updata();
 	void Draw();
@@ -24,5 +25,5 @@ private:
 
 	bool finished_ = false;
 
-
+	Fade* fade_ = nullptr;
 };

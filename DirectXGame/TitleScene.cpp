@@ -1,7 +1,11 @@
 #include "TitleScene.h"
-#include "TextureManager.h"
 #include "DirectXCommon.h"
 #include <cassert>
+
+TitleScene::~TitleScene() { 
+	delete modelTitle_;
+	delete fade_;
+}
 
 void TitleScene::Initialize() { 
 	assert(modelTitle_);
@@ -10,6 +14,10 @@ void TitleScene::Initialize() {
 	modelTitle_ = Model::CreateFromOBJ("Title", true);
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
+
+	fade_ = new Fade();
+	fade_->Intialize();
+	fade_->Start(Fade::Status::FadeIn, 1);
 }
 
 void TitleScene::Updata() {
@@ -17,7 +25,7 @@ void TitleScene::Updata() {
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		finished_ = true;
 	}
-
+	fade_->Update();
 }
 
 void TitleScene::Draw() {
@@ -26,5 +34,7 @@ void TitleScene::Draw() {
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	Model::PreDraw(commandList);
-	modelTitle_->Draw(worldTransform_,viewProjection_); //koko ga okashii
+	modelTitle_->Draw(worldTransform_,viewProjection_); 
+
+	fade_->Draw(commandList);
 }
