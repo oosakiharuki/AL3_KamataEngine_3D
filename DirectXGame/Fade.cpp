@@ -17,6 +17,26 @@ void Fade::Start(Status status, float duration) {
 	countTimer_ = 0.0f;
 }
 
+void Fade::Stop() { 
+	status_ = Status::None;
+}
+
+bool Fade::IsFinished() const {
+	switch (status_) {
+	case Status::None:
+		break;
+	case Status::FadeIn:
+	case Status::FadeOut:
+		if (countTimer_ >= duration_) {
+			return true;
+		} else {
+			return false;
+		}	
+	}
+	
+	return true;
+}
+
 void Fade::Update() {
 	switch (status_) {
 	case Status::None:
@@ -28,7 +48,7 @@ void Fade::Update() {
 			countTimer_ = duration_;
 		}
 
-		sprite_->SetColor(Vector4(0, 0, 0, std::clamp(countTimer_ / duration_, 1.0f, 0.0f)));
+		sprite_->SetColor(Vector4(0, 0, 0, std::clamp(1 - countTimer_ / duration_, 0.0f, 1.0f)));
 
 		break;
 	case Status::FadeOut:
@@ -44,6 +64,10 @@ void Fade::Update() {
 }
 
 void Fade::Draw(ID3D12GraphicsCommandList* commandList) { 
+
+	if (status_ == Status::None) {
+		return;
+	}
 
 	Sprite::PreDraw(commandList);
 	sprite_->Draw();

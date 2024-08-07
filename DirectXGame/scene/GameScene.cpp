@@ -30,6 +30,7 @@ GameScene::~GameScene() {
 
 	delete mapChipField_;
 	delete cameraController_;
+	delete fade_;
 }
 
 void GameScene::Initialize() {
@@ -117,8 +118,11 @@ void GameScene::Initialize() {
 		}
 	}	
 
-	phase_ = Phase::kPlay;
+	phase_ = Phase::kFadeIn;
 	finished_ = false;
+	fade_ = new Fade();
+	fade_->Intialize();
+	fade_->Start(Fade::Status::FadeIn, 1);
 }
 
 
@@ -153,6 +157,11 @@ void GameScene::CheckAllCollisions() {
 
 void GameScene::ChangePhase() {
 	switch (phase_) {
+	case Phase::kFadeIn:
+
+			phase_ = Phase::kPlay;
+		
+		break;
 	case Phase::kPlay:
 
 		DeathFlag = player_->IsDeath();
@@ -169,14 +178,25 @@ void GameScene::ChangePhase() {
 
 		break;
 	case Phase::kDeath:
+		fade_->Start(Fade::Status::FadeOut, 1);
 
+		break;
+	case Phase::kFadeOut:
+		if (fade_->IsFinished()) {
+			finished_ = true;
+		}
 		break;
 	}
 }
 
 void GameScene::Update() {
 	
+		ChangePhase();
+
 	switch (phase_) {
+	case Phase::kFadeIn:
+
+		break;
 	case Phase::kPlay:
 		// 自キャラ更新
 		player_->Update();
@@ -198,7 +218,6 @@ void GameScene::Update() {
 		// 全ての当たり判定
 		CheckAllCollisions();
 
-		ChangePhase();
 
 		// カメラコントローラの更新
 		cameraController_->Update();
@@ -226,7 +245,8 @@ void GameScene::Update() {
 
 
 		if (deathParticles_ && deathParticles_->Isfinfshed()) {
-			finished_ = true;
+			//finished_ = true;
+			phase_ = Phase::kFadeOut;
 		}
 
 		// カメラの更新
@@ -250,7 +270,10 @@ void GameScene::Update() {
 		}
 
 		break;
+	case Phase::kFadeOut:
+		break;
 	}
+	fade_->Update();
 }
 
 void GameScene::Draw() {
@@ -311,7 +334,7 @@ void GameScene::Draw() {
 			}
 		}
 	}
-
+	fade_->Draw(commandList);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

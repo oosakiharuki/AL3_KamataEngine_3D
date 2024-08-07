@@ -17,10 +17,13 @@
 #include "CameraController.h"
 
 #include "DeathParticles.h"
+#include"TitleScene.h"
 
 enum class Phase {
+	kFadeIn,
 	kPlay,//gameplay
 	kDeath,//death
+	kFadeOut,
 };
 
 
@@ -115,4 +118,5 @@ private: // メンバ変数
 	MapChipField* mapChipField_;
 
 	bool finished_ = false;
+	Fade* fade_ = nullptr;
 };

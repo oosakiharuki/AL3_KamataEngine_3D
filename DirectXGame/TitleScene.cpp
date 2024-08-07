@@ -21,10 +21,29 @@ void TitleScene::Initialize() {
 }
 
 void TitleScene::Updata() {
-	worldTransform_.TransferMatrix(); 
-	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-		finished_ = true;
+	switch (phase_) {
+	case Phase::kFadeIn:
+		if (fade_->IsFinished()) {
+			phase_ = Phase::kMain;
+		}
+		break;
+	case Phase::kMain:
+		fade_->Stop();
+		worldTransform_.TransferMatrix();
+		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			//finished_ = true;
+			fade_->Start(Fade::Status::FadeOut, 1);
+			phase_ = Phase::kFadeOut;
+		}
+		break;
+	case Phase::kFadeOut:
+		
+		if (fade_->IsFinished()) {
+			finished_ = true;
+		}
+		break;
 	}
+
 	fade_->Update();
 }
 

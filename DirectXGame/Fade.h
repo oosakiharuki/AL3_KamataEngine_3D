@@ -1,11 +1,9 @@
 #include <Sprite.h>
 
 
-
-
 class Fade{
 public:
-	enum class Status {
+enum class Status {
 	None,
 	FadeIn,
 	FadeOut,
@@ -14,6 +12,8 @@ public:
 	void Update();
 	void Draw(ID3D12GraphicsCommandList* commandList);
 	void Start(Status status, float duration);
+	void Stop();
+	bool IsFinished() const;
 
 private:
 	Sprite* sprite_ = nullptr;
