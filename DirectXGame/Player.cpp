@@ -31,7 +31,7 @@ void Player::Rotate() {
 
 void Player::Attack() {
 
-	if (input_->PushKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 
 		if (bullet_) {
 			delete bullet_;
@@ -81,7 +81,7 @@ void Player::Update() {
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
-
+	Rotate();
 	Attack();
 
 	//bullet_ != nullptr
