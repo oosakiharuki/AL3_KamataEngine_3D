@@ -2,7 +2,9 @@
 #include <cassert>
 
 Player::~Player() {
-	delete bullet_;
+	for (PlayerBullet* bullet_ : bullets_) {
+		delete bullet_;
+	}
 }
 
 void Player::Initialize(Model* model, uint32_t textureHandle,ViewProjection* viewProjection) {
@@ -31,17 +33,12 @@ void Player::Rotate() {
 
 void Player::Attack() {
 
-	if (input_->PushKey(DIK_SPACE)) {
-
-		if (bullet_) {
-			delete bullet_;
-			bullet_ = nullptr;
-		}
+	if (input_->TriggerKey(DIK_SPACE)) {
 
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, worldTransform_.translation_);
 
-		bullet_ = newBullet;
+		bullets_.push_back(newBullet);
 	}
 
 	
@@ -81,11 +78,11 @@ void Player::Update() {
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
-
+	Rotate();
 	Attack();
 
 	//bullet_ != nullptr
-	if (bullet_) { 
+	for (PlayerBullet* bullet_ : bullets_) { 
 		bullet_->Update();
 	}
 
@@ -101,7 +98,7 @@ void Player::Update() {
 void Player::Draw() {
 	model_->Draw(worldTransform_, *viewProjection_, textureHandle_);
 
-	if (bullet_) {
+	for (PlayerBullet* bullet_ : bullets_) { 
 		bullet_->Draw(*viewProjection_);
 	}
 }

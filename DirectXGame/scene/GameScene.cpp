@@ -31,17 +31,19 @@ void GameScene::Initialize() {
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
 
 	debugCamera_ = new DebugCamera(1280, 720);
-
+#ifdef _DEBUG
 	AxisIndicator::GetInstance()->SetVisible(true);
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
+#endif
 }
 
 void GameScene::Update() { 
 	// 自キャラ更新
 	player_->Update();
 
-	debugCamera_->Update();
 #ifdef _DEBUG
+	debugCamera_->Update();
+
 	if (input_->TriggerKey(DIK_0)) {
 		isDebugCameraActive_ = true;
 	}

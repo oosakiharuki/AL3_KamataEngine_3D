@@ -8,6 +8,8 @@
 #include "imgui.h"
 #endif
 
+#include <list>
+
 class Player {
 
 public:
@@ -34,8 +36,8 @@ public:
 
 	MyMath* myMath_ = nullptr;
 
-	PlayerBullet* bullet_ = nullptr;
+	//PlayerBullet* bullet_ = nullptr;
 
-
+	std::list<PlayerBullet*> bullets_;
 
 };
