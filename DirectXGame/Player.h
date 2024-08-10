@@ -1,7 +1,8 @@
 #include "Model.h"
 #include "WorldTransform.h"
-#include"Input.h"
+#include "Input.h"
 #include "MyMath.h"
+#include "PlayerBullet.h"
 
 #ifdef _DEBUG
 #include "imgui.h"
@@ -10,12 +11,15 @@
 class Player {
 
 public:
+	~Player();
 	void Initialize(Model* model,uint32_t textureHandle,ViewProjection* viewProjection);
 
 	void Update();
 
 	void Draw();
 
+	void Rotate();
+	void Attack();
 	private:
 	WorldTransform worldTransform_;
 
@@ -30,7 +34,7 @@ public:
 
 	MyMath* myMath_ = nullptr;
 
-
+	PlayerBullet* bullet_ = nullptr;
 
 
 
