@@ -35,8 +35,13 @@ void Player::Attack() {
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, 0, kBulletSpeed);
+
+		velocity = myMath_->TransformNormal(velocity,worldTransform_.matWorld_);
+
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTransform_.translation_);
+		newBullet->Initialize(model_, worldTransform_.translation_,velocity);
 
 		bullets_.push_back(newBullet);
 	}
@@ -85,6 +90,16 @@ void Player::Update() {
 	for (PlayerBullet* bullet_ : bullets_) { 
 		bullet_->Update();
 	}
+
+	///Bullet Dead Timer
+	bullets_.remove_if([](PlayerBullet* bullet) {
+		if (bullet->IsDead()) {
+
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
 
 
 #ifdef _DEBUG
