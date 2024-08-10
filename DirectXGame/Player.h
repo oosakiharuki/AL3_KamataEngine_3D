@@ -2,7 +2,10 @@
 #include "WorldTransform.h"
 #include"Input.h"
 #include "MyMath.h"
+
+#ifdef _DEBUG
 #include "imgui.h"
+#endif
 
 class Player {
 

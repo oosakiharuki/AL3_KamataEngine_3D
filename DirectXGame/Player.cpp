@@ -36,26 +36,24 @@ void Player::Update() {
 	worldTransform_.translation_.x += move.x;
 	worldTransform_.translation_.y += move.y;
 	worldTransform_.translation_.z += move.z;
-	
+
 	worldTransform_.UpdateMatrix();
-
-
 
 	const float kMoveLimitX = 35.0f;
 	const float kMoveLimitY = 20.0f;
 
 	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
 	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
-	
+
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
-
-
-
+#ifdef _DEBUG
 	ImGui::Begin("ImGui");
 	ImGui::DragFloat3("Player", &worldTransform_.translation_.x, 0.1f);
 	ImGui::End();
+#endif
+
 }
 
 void Player::Draw() {
