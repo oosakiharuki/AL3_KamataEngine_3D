@@ -5,6 +5,12 @@
 class Enemy {
 public:
 
+	enum class Phase {
+		Approach,
+		Leave,
+	};
+
+
 	void Intialize(Model* model,uint32_t textureHandle, ViewProjection* viewProjection);
 	void Update();
 	void Draw();
@@ -18,5 +24,7 @@ private:
 	WorldTransform worldTransform_;
 
 	ViewProjection* viewProjection_ = nullptr;
+
+	Phase phase_ = Phase::Approach;
 
 };

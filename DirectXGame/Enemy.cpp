@@ -9,7 +9,7 @@ void Enemy::Intialize(Model* model, uint32_t textureHandle,ViewProjection* viewP
 	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = Vector3(10.0f,3.0f,40.0f);
+	worldTransform_.translation_ = Vector3(0.0f,1.0f,40.0f);
 
 	viewProjection_ = viewProjection;
 }
@@ -22,7 +22,25 @@ void Enemy::Update() {
 
 	worldTransform_.UpdateMatrix();
 
-	worldTransform_.translation_.z -= kSpeed_;
+	switch (phase_) {
+	case Phase::Approach:
+
+		worldTransform_.translation_.z -= kSpeed_;
+
+		if (worldTransform_.translation_.z < 0.0f) {
+			phase_ = Phase::Leave;
+		}
+
+		break;
+	case Phase::Leave:
+
+		worldTransform_.translation_.x += -kSpeed_;
+		worldTransform_.translation_.y += kSpeed_;
+
+		break;
+	default:
+		break;
+	}
 }
 
 void Enemy::Draw() {
