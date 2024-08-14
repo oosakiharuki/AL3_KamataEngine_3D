@@ -9,6 +9,8 @@ GameScene::GameScene() {}
 GameScene::~GameScene() { 
 	delete model_; 
 	delete player_;
+	delete enemy_;
+
 	delete debugCamera_;
 }
 
@@ -20,7 +22,8 @@ void GameScene::Initialize() {
 
 	//3Dモデル
 	textureHandle_ = TextureManager::Load("Mario.jpg");
-	
+	EnemyTextureHandle_ = TextureManager::Load("uvChecker.png");
+
 	model_ = Model::Create();
 
 	viewProjection_.Initialize();
@@ -29,6 +32,12 @@ void GameScene::Initialize() {
 	player_ = new Player();
 
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
+
+
+	enemy_ = new Enemy(); 
+
+	enemy_->Intialize(model_, EnemyTextureHandle_, &viewProjection_);
+
 
 	debugCamera_ = new DebugCamera(1280, 720);
 #ifdef _DEBUG
@@ -41,6 +50,7 @@ void GameScene::Update() {
 	// 自キャラ更新
 	player_->Update();
 
+	enemy_->Update();
 #ifdef _DEBUG
 	debugCamera_->Update();
 
@@ -80,6 +90,8 @@ void GameScene::Draw() {
 
 	//自キャラ描画
 	player_->Draw();
+
+	enemy_->Draw();
 
 	 if (isDebugCameraActive_ == true) {
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;

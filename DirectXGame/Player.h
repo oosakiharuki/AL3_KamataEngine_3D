@@ -22,7 +22,7 @@ public:
 
 	void Rotate();
 	void Attack();
-	private:
+private:
 	WorldTransform worldTransform_;
 
 	Model* model_ = nullptr;

@@ -8,6 +8,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "DebugCamera.h"
 
 
@@ -52,7 +53,8 @@ private: // メンバ変数
 	/// </summary>
 
 	//テクスチャハンドル
-	uint32_t textureHandle_ = 0;
+	uint32_t textureHandle_ = 0u;
+	uint32_t EnemyTextureHandle_ = 0u;
 	
 	//3Dモデルデータ
 	Model* model_ = nullptr;
@@ -62,6 +64,9 @@ private: // メンバ変数
 
 	//自分キャラ
 	Player* player_ = nullptr;
+
+	//敵
+	Enemy* enemy_ = nullptr;
 
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
