@@ -38,6 +38,7 @@ void GameScene::Initialize() {
 
 	enemy_->Intialize(model_, EnemyTextureHandle_, &viewProjection_);
 
+	enemy_->SetPlayer(player_);
 
 	debugCamera_ = new DebugCamera(1280, 720);
 #ifdef _DEBUG

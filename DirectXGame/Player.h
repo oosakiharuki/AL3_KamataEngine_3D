@@ -22,6 +22,9 @@ public:
 
 	void Rotate();
 	void Attack();
+
+	Vector3 GetWorldPosition();
+
 private:
 	WorldTransform worldTransform_;
 

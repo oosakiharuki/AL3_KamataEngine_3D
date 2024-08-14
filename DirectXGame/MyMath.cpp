@@ -1,5 +1,21 @@
 #include "MyMath.h"
 
+Vector3 MyMath::Add(const Vector3& v1, const Vector3& v2) {
+	Vector3 result;
+	result.x = v1.x + v2.x;
+	result.y = v1.y + v2.y;
+	result.z = v1.z + v2.z;
+	return result;
+}
+
+Vector3 MyMath::Subtract(const Vector3& v1, const Vector3& v2) {
+	Vector3 result;
+	result.x = v1.x - v2.x;
+	result.y = v1.y - v2.y;
+	result.z = v1.z - v2.z;
+	return result;
+}
+
 Matrix4x4 MyMath::Multiply(Matrix4x4 m1, Matrix4x4 m2) {
 	Matrix4x4 result{};
 	result.m[0][0] = m1.m[0][0] * m2.m[0][0] + m1.m[0][1] * m2.m[1][0] + m1.m[0][2] * m2.m[2][0] +
@@ -127,5 +143,13 @@ Vector3 MyMath::TransformNormal(const Vector3& v, const Matrix4x4& m) {
 		v.x *m.m[0][1] + v.y *m.m[1][1] + v.z *m.m[2][1],
 		v.x *m.m[0][2] + v.y *m.m[1][2] + v.z *m.m[2][2]
 	};
+	return result;
+}
+
+Vector3 MyMath::Normalize(const Vector3& v) {
+	Vector3 result;
+	result.x = v.x / (float)sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
+	result.y = v.y / (float)sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
+	result.z = v.z / (float)sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
 	return result;
 }

@@ -1,6 +1,8 @@
 #include "Enemy.h"
 #include <cassert>
 
+#include "Player.h"
+
 Enemy::~Enemy() { 
 
 	for (EnemyBullet* bullet : bullets_) {
@@ -17,32 +19,59 @@ void Enemy::Intialize(Model* model, uint32_t textureHandle,ViewProjection* viewP
 	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = Vector3(20.0f,1.0f,40.0f);
+	worldTransform_.translation_ = Vector3(20.0f,1.0f,80.0f);
 
 	viewProjection_ = viewProjection;
 }
 
 void Enemy::Fire() {
-
 	const float deltaTime = 1.0f / 60.0f;
 
 	bulletTimer_ -= deltaTime;
 
 	if (bulletTimer_ <= 0.0f) {
 
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, 0, -kBulletSpeed);
+		assert(player_);
+
+		const float kBulletSpeed = 0.5f;
+
+		Vector3 playerPostion = player_->GetWorldPosition();
+		Vector3 enemyPostion = GetWorldPositon();
+
+		Vector3 subtract = myMath_->Subtract(playerPostion, enemyPostion);
+
+		Vector3 normalize = myMath_->Normalize(subtract);
+
+		normalize.x *= kBulletSpeed;
+		normalize.y *= kBulletSpeed;
+		normalize.z *= kBulletSpeed;
+
+
+		Vector3 velocity(normalize);
+
+
 
 		velocity = myMath_->TransformNormal(velocity, worldTransform_.matWorld_);
+
 
 		EnemyBullet* newBullet = new EnemyBullet();
 		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
 		bullets_.push_back(newBullet);
-
 		bulletTimer_ = 1.0f;
 	}
 }
+
+Vector3 Enemy::GetWorldPositon() { 
+	Vector3 worldPos{};
+
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}
+
 
 void Enemy::Update() {
 
@@ -74,7 +103,7 @@ void Enemy::Update() {
 
 	Fire();
 
-		// bullet_ != nullptr
+	// bullet_ != nullptr
 	for (EnemyBullet* bullet_ : bullets_) {
 		bullet_->Update();
 	}
@@ -88,8 +117,6 @@ void Enemy::Update() {
 		}
 		return false;
 	});
-
-
 }
 
 void Enemy::Draw() {

@@ -4,6 +4,8 @@
 #include "EnemyBullet.h"
 #include "MyMath.h"
 
+class Player;
+
 class Enemy {
 public:
 
@@ -18,6 +20,10 @@ public:
 	void Draw();
 	void Fire();
 
+	void SetPlayer(Player* player) { player_ = player; }
+
+	Vector3 GetWorldPositon();
+
 private:
 
 	Model* model_ = nullptr;
@@ -30,9 +36,11 @@ private:
 
 	MyMath* myMath_ = nullptr;
 
+
 	Phase phase_ = Phase::Approach;
 	std::list<EnemyBullet*> bullets_;
 
 	float bulletTimer_ = 1.0f;
 
+	Player* player_ = nullptr;
 };
