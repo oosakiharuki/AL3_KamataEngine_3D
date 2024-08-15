@@ -7,11 +7,27 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 
 	model_ = model;
 
-	textureHandle_ = TextureManager::Load("white1x1.png");
+	textureHandle_ = TextureManager::Load("enemyBullet.png");
 	worldTransform_.Initialize();
 
 	worldTransform_.translation_ = position;
 	velocity_ = velocity;
+
+	color = Vector4(1,0,0,0);
+}
+
+void EnemyBullet::OnCollision() { 
+	isDead_ = true;
+}
+
+Vector3 EnemyBullet::GetWorldPosition() {
+	Vector3 worldPos{};
+
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
 }
 
 void EnemyBullet::Update() {

@@ -36,7 +36,7 @@ void Enemy::Fire() {
 		const float kBulletSpeed = 0.5f;
 
 		Vector3 playerPostion = player_->GetWorldPosition();
-		Vector3 enemyPostion = GetWorldPositon();
+		Vector3 enemyPostion = GetWorldPosition();
 
 		Vector3 subtract = myMath_->Subtract(playerPostion, enemyPostion);
 
@@ -62,7 +62,7 @@ void Enemy::Fire() {
 	}
 }
 
-Vector3 Enemy::GetWorldPositon() { 
+Vector3 Enemy::GetWorldPosition() { 
 	Vector3 worldPos{};
 
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
@@ -72,6 +72,9 @@ Vector3 Enemy::GetWorldPositon() {
 	return worldPos;
 }
 
+void Enemy::OnCollision() {
+
+}
 
 void Enemy::Update() {
 

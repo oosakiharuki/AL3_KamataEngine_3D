@@ -47,11 +47,103 @@ void GameScene::Initialize() {
 #endif
 }
 
+
+void GameScene::CheckAllCollisions() { 
+	Vector3 posA, posB; 
+
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+	
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+
+
+	//case radius
+	const float plaeyrRadius = 1.0f;
+
+	const float EnemyRadius = 1.0f;
+
+
+	for (EnemyBullet* bullet : enemyBullets) {
+
+		posA = player_->GetWorldPosition();
+		posB = bullet->GetWorldPosition();
+
+		Vector3 distance{};
+
+		distance.x = (posB.x - posA.x) * (posB.x - posA.x); 	
+		distance.y = (posB.y - posA.y) * (posB.y - posA.y);	    
+		distance.z = (posB.z - posA.z) * (posB.z - posA.z);
+
+		float L;
+
+		L = (plaeyrRadius + EnemyRadius) * (plaeyrRadius + EnemyRadius);
+
+
+		if (distance.x + distance.y + distance.z <= L) {
+
+			player_->OnCollision();
+			bullet->OnCollision();
+		}
+	}
+
+
+	for (PlayerBullet* bullet : playerBullets) {
+
+		posA = enemy_->GetWorldPosition();
+		posB = bullet->GetWorldPosition();
+
+		Vector3 distance{};
+
+		distance.x = (posB.x - posA.x) * (posB.x - posA.x);
+		distance.y = (posB.y - posA.y) * (posB.y - posA.y);
+		distance.z = (posB.z - posA.z) * (posB.z - posA.z);
+
+		float L;
+
+		L = (plaeyrRadius + EnemyRadius) * (plaeyrRadius + EnemyRadius);
+
+		if (distance.x + distance.y + distance.z <= L) {
+
+			enemy_->OnCollision();
+			bullet->OnCollision();
+		}
+	}
+
+
+	for (PlayerBullet* bulletP : playerBullets) {
+		for (EnemyBullet* bulletE : enemyBullets) {
+
+			posA = bulletP->GetWorldPosition();
+			posB = bulletE->GetWorldPosition();
+
+			Vector3 distance{};
+
+			distance.x = (posB.x - posA.x) * (posB.x - posA.x);
+			distance.y = (posB.y - posA.y) * (posB.y - posA.y);
+			distance.z = (posB.z - posA.z) * (posB.z - posA.z);
+
+			float L;
+
+			L = (plaeyrRadius + EnemyRadius) * (plaeyrRadius + EnemyRadius);
+
+			if (distance.x + distance.y + distance.z <= L) {
+
+				bulletP->OnCollision();
+				bulletE->OnCollision();
+			}
+		}
+	}
+}
+
+
+
 void GameScene::Update() { 
 	// 自キャラ更新
 	player_->Update();
 
 	enemy_->Update();
+
+	CheckAllCollisions();
+
 #ifdef _DEBUG
 	debugCamera_->Update();
 

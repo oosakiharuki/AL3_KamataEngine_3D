@@ -9,6 +9,9 @@ public:
 	void Draw(const ViewProjection& viewProjection);
 	bool IsDead() const { return isDead_; }
 
+	void OnCollision();
+	Vector3 GetWorldPosition();
+
 private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
@@ -20,4 +23,6 @@ private:
 
 	int32_t deathTimer_ = kLifeTime;
 	bool isDead_ = false;
+
+	Vector4 color;
 };
