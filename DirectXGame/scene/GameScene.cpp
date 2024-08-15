@@ -11,6 +11,8 @@ GameScene::~GameScene() {
 	delete player_;
 	delete enemy_;
 
+	delete skydomeModel_;
+	delete skydome_;
 	delete debugCamera_;
 }
 
@@ -33,12 +35,22 @@ void GameScene::Initialize() {
 
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
 
-
+	//敵生成
 	enemy_ = new Enemy(); 
 
 	enemy_->Intialize(model_, EnemyTextureHandle_, &viewProjection_);
 
 	enemy_->SetPlayer(player_);
+
+
+	// スカイドーム
+	skydomeModel_ = Model::CreateFromOBJ("skydome", true);
+	textureHandleSkydome_ = TextureManager::Load("skydome/skydome.png");
+	skydome_ = new Skydome();
+	skydome_->Initialize(skydomeModel_, textureHandleSkydome_, &viewProjection_);
+
+
+
 
 	debugCamera_ = new DebugCamera(1280, 720);
 #ifdef _DEBUG
@@ -144,6 +156,7 @@ void GameScene::Update() {
 
 	CheckAllCollisions();
 
+	skydome_->Update();
 #ifdef _DEBUG
 	debugCamera_->Update();
 
@@ -180,6 +193,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
+	skydome_->Draw(viewProjection_);
 
 	//自キャラ描画
 	player_->Draw();
