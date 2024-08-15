@@ -11,6 +11,7 @@
 #include "Enemy.h"
 #include "DebugCamera.h"
 #include "Skydome.h"
+#include "RailCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -81,4 +82,7 @@ private: // メンバ変数
 	Skydome* skydome_ = nullptr;
 	Model* skydomeModel_ = nullptr;
 	uint32_t textureHandleSkydome_ = 0u;
+
+	//レールカメラ
+	RailCamera* railCamera_ = nullptr;
 };

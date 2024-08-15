@@ -14,6 +14,7 @@ GameScene::~GameScene() {
 	delete skydomeModel_;
 	delete skydome_;
 	delete debugCamera_;
+	delete railCamera_;
 }
 
 void GameScene::Initialize() {
@@ -32,6 +33,9 @@ void GameScene::Initialize() {
 
 	//自キャラ生成
 	player_ = new Player();
+	player_->SetParent(&railCamera_->GetWorldTransform());
+
+	Vector3 playerPosition(0, 0, 10.0f);
 
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
 
@@ -49,7 +53,8 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	skydome_->Initialize(skydomeModel_, textureHandleSkydome_, &viewProjection_);
 
-
+	railCamera_ = new RailCamera();
+	railCamera_->Initialize(&viewProjection_);
 
 
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -157,10 +162,13 @@ void GameScene::Update() {
 	CheckAllCollisions();
 
 	skydome_->Update();
+
+	railCamera_->Update();
+
 #ifdef _DEBUG
 	debugCamera_->Update();
 
-	if (input_->TriggerKey(DIK_0)) {
+	if (input_->TriggerKey(DIK_F5)) {
 		isDebugCameraActive_ = true;
 	}
 #endif
@@ -205,6 +213,12 @@ void GameScene::Draw() {
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 		viewProjection_.TransferMatrix();		
 	} else {
+	
+		 //レールカメラ繁栄
+		viewProjection_.translation_ = railCamera_->GetWorldTranslation();
+		viewProjection_.rotation_ = railCamera_->GetWorldRotate();
+		//viewProjection_.matView = railCamera_->GetMatView();
+
 		viewProjection_.UpdateMatrix();
 	}
 

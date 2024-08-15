@@ -28,6 +28,8 @@ public:
 	void OnCollision();
 	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
 
+	void SetParent(const WorldTransform* parent);
+
 private:
 	WorldTransform worldTransform_;
 

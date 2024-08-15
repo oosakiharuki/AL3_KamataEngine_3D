@@ -61,6 +61,10 @@ void Player::OnCollision() {
 
 }
 
+void Player::SetParent(const WorldTransform* parent) {
+	worldTransform_.parent_ = parent; 
+}
+
 void Player::Update() {
 	worldTransform_.TransferMatrix();
 
