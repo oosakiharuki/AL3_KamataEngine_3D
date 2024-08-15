@@ -116,6 +116,7 @@ void Player::Update() {
 #ifdef _DEBUG
 	ImGui::Begin("ImGui");
 	ImGui::DragFloat3("Player", &worldTransform_.translation_.x, 0.1f);
+	ImGui::Text("trigger 0 key debugCamera");
 	ImGui::End();
 #endif
 
