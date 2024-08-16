@@ -5,6 +5,7 @@
 #include "MyMath.h"
 
 class Player;
+class GameScene;
 
 class Enemy {
 public:
@@ -15,17 +16,21 @@ public:
 	};
 
 	~Enemy();
-	void Intialize(Model* model,uint32_t textureHandle, ViewProjection* viewProjection);
+	void Intialize(Model* model,uint32_t textureHandle, ViewProjection* viewProjection,Vector3 position);
 	void Update();
 	void Draw();
-	void Fire();
+	//void Fire();
 
 	void SetPlayer(Player* player) { player_ = player; }
 
 	Vector3 GetWorldPosition();
 
 	void OnCollision();
-	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
+
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+	const WorldTransform* GetWorldTransform()const  { return &worldTransform_; }
+
+	bool IsDead() const { return isDead_; }
 
 private:
 
@@ -43,7 +48,10 @@ private:
 	Phase phase_ = Phase::Approach;
 	std::list<EnemyBullet*> bullets_;
 
-	float bulletTimer_ = 1.0f;
+	//float bulletTimer_ = 1.0f;
 
 	Player* player_ = nullptr;
+	GameScene* gameScene_ = nullptr;
+
+	bool isDead_ = false;
 };
