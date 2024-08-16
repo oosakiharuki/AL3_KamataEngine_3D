@@ -87,7 +87,7 @@ void Enemy::Update() {
 	switch (phase_) {
 	case Phase::Approach:
 
-		worldTransform_.translation_.z += -kSpeed_;
+		//worldTransform_.translation_.z += -kSpeed_;
 
 		if (worldTransform_.translation_.z < 0.0f) {
 			phase_ = Phase::Leave;

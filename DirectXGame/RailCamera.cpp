@@ -26,7 +26,7 @@ void RailCamera::Initialize(ViewProjection* viewProjection) {
 
 Vector3 RailCamera::GetWorldTranslation() {
 
-	Vector3 kCameraTranslation = {0.0f, 0.0f,0.0f};
+	Vector3 kCameraTranslation = {0.0f, 0.0f,-0.1f};
 
 	worldTramsform_.translation_.x += kCameraTranslation.x;
 	worldTramsform_.translation_.y += kCameraTranslation.y;
@@ -37,7 +37,7 @@ Vector3 RailCamera::GetWorldTranslation() {
 
 Vector3 RailCamera::GetWorldRotate() {
 
-	Vector3 kCameraRotate = {0.0f, 0.01f, 0.0f};
+	Vector3 kCameraRotate = {0.0f, 0.0f, 0.0f};
 
 	worldTramsform_.rotation_.x += kCameraRotate.x;
 	worldTramsform_.rotation_.y += kCameraRotate.y;

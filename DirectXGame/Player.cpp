@@ -125,7 +125,7 @@ void Player::Update(RailCamera* railCamera) {
 #ifdef _DEBUG
 	ImGui::Begin("ImGui");
 	ImGui::DragFloat3("Player", &worldTransform_.translation_.x, 0.1f);
-	ImGui::Text("trigger 0 key debugCamera");
+	ImGui::Text("trigger F5 key debugCamera");
 	ImGui::End();
 #endif
 
