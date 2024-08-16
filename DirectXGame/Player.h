@@ -10,18 +10,20 @@
 
 #include <list>
 
+class RailCamera;
+
 class Player {
 
 public:
 	~Player();
-	void Initialize(Model* model,uint32_t textureHandle,ViewProjection* viewProjection);
+	void Initialize(Model* model,uint32_t textureHandle,ViewProjection* viewProjection,Vector3 poaition);
 
-	void Update();
+	void Update(RailCamera* railCamera);
 
 	void Draw();
 
 	void Rotate();
-	void Attack();
+	void Attack(RailCamera* railCamera);
 
 	Vector3 GetWorldPosition();
 
@@ -48,4 +50,5 @@ private:
 
 	std::list<PlayerBullet*> bullets_;
 
+	RailCamera* railCamera_ = nullptr;
 };

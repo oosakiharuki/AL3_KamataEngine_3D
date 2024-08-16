@@ -6,15 +6,27 @@ void RailCamera::Initialize(ViewProjection* viewProjection) {
 	worldTramsform_.translation_ = viewProjection->translation_;
 	worldTramsform_.rotation_ = viewProjection->rotation_;
 
+	Vector3 Translation = {0.0f, 0.0f, 0.0f};
+
+	worldTramsform_.translation_.x = Translation.x;
+	worldTramsform_.translation_.y = Translation.y;
+	worldTramsform_.translation_.z = Translation.z;
+
+	Vector3 Rotate = {0.0f, 0.0f, 0.0f};
+
+	worldTramsform_.rotation_.x = Rotate.x;
+	worldTramsform_.rotation_.y = Rotate.y;
+	worldTramsform_.rotation_.z = Rotate.z;
+
 	viewProjection_ = viewProjection;
 
 	viewProjection_->farZ = 400.0f;
-
+	
 }
 
 Vector3 RailCamera::GetWorldTranslation() {
 
-	Vector3 kCameraTranslation = {0.0f, 0.0f,0.1f};
+	Vector3 kCameraTranslation = {0.0f, 0.0f,0.0f};
 
 	worldTramsform_.translation_.x += kCameraTranslation.x;
 	worldTramsform_.translation_.y += kCameraTranslation.y;
@@ -25,7 +37,7 @@ Vector3 RailCamera::GetWorldTranslation() {
 
 Vector3 RailCamera::GetWorldRotate() {
 
-	Vector3 kCameraRotate = {0.0f, 0.0f, 0.0f};
+	Vector3 kCameraRotate = {0.0f, 0.01f, 0.0f};
 
 	worldTramsform_.rotation_.x += kCameraRotate.x;
 	worldTramsform_.rotation_.y += kCameraRotate.y;
@@ -35,6 +47,9 @@ Vector3 RailCamera::GetWorldRotate() {
 }
 
 void RailCamera::Update() {
+
+	////GetWorldTranslation();
+	////GetWorldRotate();
 
 	worldTramsform_.UpdateMatrix();
 

@@ -2,8 +2,9 @@
 #include "TextureManager.h"
 #include <cassert>
 
+#include "RailCamera.h"
 
-void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) { 
+void PlayerBullet::Initialize( Model* model, const Vector3& position, const Vector3& velocity) { 
 	assert(model);
 
 	model_ = model;
@@ -27,6 +28,10 @@ Vector3 PlayerBullet::GetWorldPosition() {
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
+}
+
+void PlayerBullet::SetParent(const WorldTransform* parent) { 
+	worldTransform_.parent_ = parent;
 }
 
 void PlayerBullet::Update() {

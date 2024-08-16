@@ -1,13 +1,15 @@
 #include "Player.h"
 #include <cassert>
 
+#include "RailCamera.h"
+
 Player::~Player() {
 	for (PlayerBullet* bullet_ : bullets_) {
 		delete bullet_;
 	}
 }
 
-void Player::Initialize(Model* model, uint32_t textureHandle,ViewProjection* viewProjection) {
+void Player::Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection, Vector3 position) {
 
 	assert(model);
 
@@ -15,6 +17,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle,ViewProjection* vie
 	textureHandle_ = textureHandle;
 	worldTransform_.Initialize();
 
+	worldTransform_.translation_ = position;
 	viewProjection_ = viewProjection;
 	input_ = Input::GetInstance();
 }
@@ -31,7 +34,7 @@ void Player::Rotate() {
 	}
 }
 
-void Player::Attack() {
+void Player::Attack(RailCamera* railCamera) {
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 
@@ -42,6 +45,8 @@ void Player::Attack() {
 
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, worldTransform_.translation_,velocity);
+
+		newBullet->SetParent(&railCamera->GetWorldTransform());
 
 		bullets_.push_back(newBullet);
 	}
@@ -62,10 +67,10 @@ void Player::OnCollision() {
 }
 
 void Player::SetParent(const WorldTransform* parent) {
-	worldTransform_.parent_ = parent; 
+	worldTransform_.parent_ = parent;
 }
 
-void Player::Update() {
+void Player::Update(RailCamera* railCamera) {
 	worldTransform_.TransferMatrix();
 
 	Vector3 move = {0, 0, 0};
@@ -99,7 +104,7 @@ void Player::Update() {
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
 	Rotate();
-	Attack();
+	Attack(railCamera);
 
 	//bullet_ != nullptr
 	for (PlayerBullet* bullet_ : bullets_) { 

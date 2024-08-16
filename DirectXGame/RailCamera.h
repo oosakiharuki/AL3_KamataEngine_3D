@@ -17,7 +17,7 @@ public:
 	//Matrix4x4 GetMatView();
 
 	const WorldTransform& GetWorldTransform() const { return worldTramsform_; } 
-
+		
 private:
 	WorldTransform worldTramsform_;
 	ViewProjection* viewProjection_;

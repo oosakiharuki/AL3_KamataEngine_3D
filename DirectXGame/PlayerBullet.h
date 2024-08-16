@@ -1,6 +1,8 @@
 #include "Model.h"
 #include "WorldTransform.h"
 
+class RailCamera;
+
 class PlayerBullet {
 public:
 
@@ -14,6 +16,8 @@ public:
 
 	void OnCollision();
 	Vector3 GetWorldPosition();
+
+	void SetParent(const WorldTransform* parent);
 
 private:
 	WorldTransform worldTransform_;

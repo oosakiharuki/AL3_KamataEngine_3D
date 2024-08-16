@@ -30,15 +30,17 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 
 	viewProjection_.Initialize();
+	
+	//レールカメラ
+	railCamera_ = new RailCamera();
+	railCamera_->Initialize(&viewProjection_);
 
 	//自キャラ生成
 	player_ = new Player();
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
-	Vector3 playerPosition(0, 0, 10.0f);
-
-	player_->Initialize(model_, textureHandle_, &viewProjection_);
-
+	Vector3 playerPosition(0, 0, 40.0f);
+	player_->Initialize(model_, textureHandle_, &viewProjection_,playerPosition);
 	//敵生成
 	enemy_ = new Enemy(); 
 
@@ -49,12 +51,11 @@ void GameScene::Initialize() {
 
 	// スカイドーム
 	skydomeModel_ = Model::CreateFromOBJ("skydome", true);
-	textureHandleSkydome_ = TextureManager::Load("skydome/skydome.png");
+	textureHandleSkydome_ = TextureManager::Load("uvChecker.png");
 	skydome_ = new Skydome();
 	skydome_->Initialize(skydomeModel_, textureHandleSkydome_, &viewProjection_);
 
-	railCamera_ = new RailCamera();
-	railCamera_->Initialize(&viewProjection_);
+
 
 
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -155,7 +156,7 @@ void GameScene::CheckAllCollisions() {
 
 void GameScene::Update() { 
 	// 自キャラ更新
-	player_->Update();
+	player_->Update(railCamera_);
 
 	enemy_->Update();
 
@@ -164,7 +165,8 @@ void GameScene::Update() {
 	skydome_->Update();
 
 	railCamera_->Update();
-
+	viewProjection_.translation_ = railCamera_->GetWorldTranslation();
+	viewProjection_.rotation_ = railCamera_->GetWorldRotate();
 #ifdef _DEBUG
 	debugCamera_->Update();
 
@@ -215,8 +217,7 @@ void GameScene::Draw() {
 	} else {
 	
 		 //レールカメラ繁栄
-		viewProjection_.translation_ = railCamera_->GetWorldTranslation();
-		viewProjection_.rotation_ = railCamera_->GetWorldRotate();
+
 		//viewProjection_.matView = railCamera_->GetMatView();
 
 		viewProjection_.UpdateMatrix();
